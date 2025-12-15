@@ -1,1 +1,577 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LKZ Matrizes - Sistema de Pedidos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        nav {
+            background-color: #333;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #667eea;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        section {
+            background: white;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        section h2 {
+            color: #667eea;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+
+        .order-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+
+        .form-group textarea {
+            grid-column: 1 / -1;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .product-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-card h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            color: #764ba2;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .product-description {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s ease, transform 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background: #667eea;
+        }
+
+        .order-summary {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+            margin-top: 1.5rem;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-top: 0.5rem;
+            padding-top: 1rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-approved {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-delivered {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .contact-item {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .contact-item h3 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-item p {
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .order-form {
+                grid-template-columns: 1fr;
+            }
+
+            nav ul {
+                gap: 1rem;
+                justify-content: space-around;
+            }
+
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            main {
+                padding: 0 0.5rem;
+            }
+
+            section {
+                padding: 1.5rem;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        section {
+            animation: slideIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🔧 LKZ Matrizes</h1>
+        <p>Sistema de Pedidos - Soluções em Matrizes de Precisão</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#pedidos">Novo Pedido</a></li>
+            <li><a href="#produtos">Produtos</a></li>
+            <li><a href="#meus-pedidos">Meus Pedidos</a></li>
+            <li><a href="#contato">Contato</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Seção de Novo Pedido -->
+        <section id="pedidos">
+            <h2>📝 Realizar Novo Pedido</h2>
+            <form class="order-form" id="orderForm">
+                <div class="form-group">
+                    <label for="clientName">Nome do Cliente *</label>
+                    <input type="text" id="clientName" name="clientName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="clientEmail">Email *</label>
+                    <input type="email" id="clientEmail" name="clientEmail" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="clientPhone">Telefone *</label>
+                    <input type="tel" id="clientPhone" name="clientPhone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="company">Empresa</label>
+                    <input type="text" id="company" name="company">
+                </div>
+
+                <div class="form-group">
+                    <label for="product">Selecione o Produto *</label>
+                    <select id="product" name="product" required>
+                        <option value="">-- Escolha um produto --</option>
+                        <option value="matriz-corte">Matriz de Corte</option>
+                        <option value="matriz-dobra">Matriz de Dobra</option>
+                        <option value="matriz-estampo">Matriz de Estampo</option>
+                        <option value="matriz-injeção">Matriz de Injeção</option>
+                        <option value="personalizado">Personalizado</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="quantity">Quantidade *</label>
+                    <input type="number" id="quantity" name="quantity" min="1" value="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="specifications">Especificações Técnicas</label>
+                    <textarea id="specifications" name="specifications" placeholder="Descreva as especificações, dimensões, materiais, etc."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="deadline">Prazo de Entrega Desejado</label>
+                    <input type="date" id="deadline" name="deadline">
+                </div>
+
+                <button type="submit" class="btn" style="grid-column: 1 / -1;">Enviar Pedido</button>
+            </form>
+
+            <div class="order-summary">
+                <h3>Resumo do Pedido</h3>
+                <div class="summary-item">
+                    <span>Produto:</span>
+                    <span id="summaryProduct">-</span>
+                </div>
+                <div class="summary-item">
+                    <span>Quantidade:</span>
+                    <span id="summaryQuantity">-</span>
+                </div>
+                <div class="summary-item">
+                    <span>Total Estimado:</span>
+                    <span id="summaryTotal">R$ 0,00</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Produtos -->
+        <section id="produtos">
+            <h2>📦 Nossos Produtos</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <h3>Matriz de Corte</h3>
+                    <p class="product-description">Precisão máxima para corte de materiais diversos</p>
+                    <div class="product-price">A partir de R$ 500,00</div>
+                    <button class="btn btn-secondary">Solicitar Orçamento</button>
+                </div>
+
+                <div class="product-card">
+                    <h3>Matriz de Dobra</h3>
+                    <p class="product-description">Ideal para dobramento de chapas e materiais</p>
+                    <div class="product-price">A partir de R$ 750,00</div>
+                    <button class="btn btn-secondary">Solicitar Orçamento</button>
+                </div>
+
+                <div class="product-card">
+                    <h3>Matriz de Estampo</h3>
+                    <p class="product-description">Estampagem de alta qualidade e durabilidade</p>
+                    <div class="product-price">A partir de R$ 1.200,00</div>
+                    <button class="btn btn-secondary">Solicitar Orçamento</button>
+                </div>
+
+                <div class="product-card">
+                    <h3>Matriz de Injeção</h3>
+                    <p class="product-description">Moldagem por injeção com tolerância ultra-fina</p>
+                    <div class="product-price">A partir de R$ 2.500,00</div>
+                    <button class="btn btn-secondary">Solicitar Orçamento</button>
+                </div>
+
+                <div class="product-card">
+                    <h3>Soluções Personalizadas</h3>
+                    <p class="product-description">Matrizes feitas sob medida conforme suas necessidades</p>
+                    <div class="product-price">Sob Consulta</div>
+                    <button class="btn btn-secondary">Falar com Especialista</button>
+                </div>
+
+                <div class="product-card">
+                    <h3>Manutenção e Reparo</h3>
+                    <p class="product-description">Serviço de manutenção preventiva e corretiva</p>
+                    <div class="product-price">A partir de R$ 200,00</div>
+                    <button class="btn btn-secondary">Agendar Visita</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Meus Pedidos -->
+        <section id="meus-pedidos">
+            <h2>📋 Meus Pedidos</h2>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background-color: #f0f0f0;">
+                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #667eea;">Pedido #</th>
+                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #667eea;">Produto</th>
+                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #667eea;">Data</th>
+                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #667eea;">Valor</th>
+                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #667eea;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 1rem;">#001</td>
+                        <td style="padding: 1rem;">Matriz de Corte</td>
+                        <td style="padding: 1rem;">15/12/2025</td>
+                        <td style="padding: 1rem;">R$ 750,00</td>
+                        <td style="padding: 1rem;"><span class="status-badge status-approved">✓ Aprovado</span></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 1rem;">#002</td>
+                        <td style="padding: 1rem;">Matriz de Injeção</td>
+                        <td style="padding: 1rem;">10/12/2025</td>
+                        <td style="padding: 1rem;">R$ 3.200,00</td>
+                        <td style="padding: 1rem;"><span class="status-badge status-pending">⏳ Pendente</span></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 1rem;">#003</td>
+                        <td style="padding: 1rem;">Matriz de Dobra</td>
+                        <td style="padding: 1rem;">01/12/2025</td>
+                        <td style="padding: 1rem;">R$ 1.100,00</td>
+                        <td style="padding: 1rem;"><span class="status-badge status-delivered">📦 Entregue</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Seção de Contato -->
+        <section id="contato">
+            <h2>📞 Contato</h2>
+            <p>Entre em contato conosco para mais informações, orçamentos ou dúvidas sobre nossos produtos e serviços.</p>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <h3>📧 Email</h3>
+                    <p><a href="mailto:contato@lkzmatrizes.com.br" style="color: #667eea; text-decoration: none;">contato@lkzmatrizes.com.br</a></p>
+                </div>
+
+                <div class="contact-item">
+                    <h3>📱 Telefone</h3>
+                    <p><a href="tel:+5511999999999" style="color: #667eea; text-decoration: none;">+55 (11) 9999-9999</a></p>
+                </div>
+
+                <div class="contact-item">
+                    <h3>🏢 Endereço</h3>
+                    <p>São Paulo - SP, Brasil<br>CNPJ: 00.000.000/0000-00</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 LKZ Matrizes. Todos os direitos reservados.</p>
+        <p>Desenvolvido com ❤️ para excelência em matrizes de precisão</p>
+    </footer>
+
+    <script>
+        // Atualizar resumo do pedido
+        document.getElementById('product').addEventListener('change', updateSummary);
+        document.getElementById('quantity').addEventListener('change', updateSummary);
+
+        function updateSummary() {
+            const productSelect = document.getElementById('product');
+            const quantityInput = document.getElementById('quantity');
+            
+            const productText = productSelect.options[productSelect.selectedIndex].text;
+            const quantity = quantityInput.value;
+
+            document.getElementById('summaryProduct').textContent = productText || '-';
+            document.getElementById('summaryQuantity').textContent = quantity || '-';
+
+            // Cálculo estimado de preço
+            const prices = {
+                'matriz-corte': 500,
+                'matriz-dobra': 750,
+                'matriz-estampo': 1200,
+                'matriz-injeção': 2500
+            };
+
+            const price = prices[productSelect.value] || 0;
+            const total = price * quantity;
+
+            document.getElementById('summaryTotal').textContent = 
+                total > 0 ? `R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'R$ 0,00';
+        }
+
+        // Submeter formulário
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Pedido recebido com sucesso! Entraremos em contato em breve para confirmação.');
+            this.reset();
+            updateSummary();
+        });
+
+        // Botões de produtos
+        document.querySelectorAll('.btn-secondary').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Você será redirecionado para o formulário de orçamento.');
+                document.getElementById('orderForm').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Scroll suave para links de navegação
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
