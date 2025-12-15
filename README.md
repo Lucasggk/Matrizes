@@ -1,1 +1,1 @@
-# Site feito para faer vendas de matrizes (bordado)
+# Site feito para vendas de matrizes (bordado)
