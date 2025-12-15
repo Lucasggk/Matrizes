@@ -6,7 +6,7 @@
     <title>LKZ Matrizes - Máquina de Bordar Profissional</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}body{background:linear-gradient(135deg,#0f172a 0%,#1e293b 25%,#312e81 50%,#4f46e5 100%);min-height:100vh;font-family:'Inter',sans-serif;overflow-x:hidden}.container{max-width:1200px;margin:0 auto;padding:20px}.header{text-align:center;margin-bottom:30px}.logo{font-size:42px;font-weight:900;background:linear-gradient(135deg,#06b6d4,#7c3aed,#4f46e5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;font-family:'Poppins',sans-serif;margin-bottom:8px}.tagline{color:rgba(255,255,255,0.9);font-size:15px;font-weight:600;letter-spacing:2px;font-family:'Poppins',sans-serif}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin-bottom:30px}.stat-card{background:rgba(255,255,255,0.08);backdrop-filter:blur(20px);border-radius:16px;padding:20px;text-align:center;border:1px solid rgba(124,58,237,0.3);transition:all 0.3s}.stat-card:hover{transform:translateY(-5px);background:rgba(255,255,255,0.12);border-color:rgba(124,58,237,0.5)}.stat-icon{font-size:32px;margin-bottom:8px}.stat-value{font-size:28px;font-weight:900;background:linear-gradient(135deg,#06b6d4,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'Poppins',sans-serif;margin-bottom:4px}.stat-label{color:rgba(255,255,255,0.8);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px}.pricing-info{background:rgba(255,255,255,0.08);backdrop-filter:blur(20px);border-radius:20px;padding:30px;margin-bottom:25px;border:1px solid rgba(124,58,237,0.3);text-align:center}.pricing-title{color:rgba(255,255,255,0.95);font-size:24px;font-weight:900;margin-bottom:20px;font-family:'Poppins',sans-serif}.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:20px}.price-item{background:rgba(124,58,237,0.2);border:2px solid rgba(124,58,237,0.4);border-radius:14px;padding:20px;transition:all 0.3s}.price-item:hover{transform:scale(1.05);border-color:rgba(124,58,237,0.6);background:rgba(124,58,237,0.3)}.price-qty{color:rgba(255,255,255,0.9);font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}.price-amount{font-size:36px;font-weight:900;background:linear-gradient(135deg,#06b6d4,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'Poppins',sans-serif}.price-note{color:rgba(255,255,255,0.7);font-size:13px;margin-top:15px;padding:15px;background:rgba(6,182,212,0.1);border-radius:10px;border:1px solid rgba(6,182,212,0.3)}.cta-btn{display:block;width:100%;max-width:400px;margin:0 auto 25px;padding:16px 40px;background:linear-gradient(135deg,#7c3aed,#4f46e5,#06b6d4);color:white;font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:2px;border:none;border-radius:14px;cursor:pointer;transition:all 0.3s;font-family:'Poppins',sans-serif;box-shadow:0 10px 30px rgba(124,58,237,0.4)}.cta-btn:hover{transform:translateY(-4px);box-shadow:0 15px 40px rgba(124,58,237,0.6)}.form-container{display:none;background:rgba(20,20,50,0.9);backdrop-filter:blur(25px);border-radius:25px;padding:35px;border:1px solid rgba(124,58,237,0.3)}.form-container.active{display:block}.form-header{text-align:center;margin-bottom:30px}.form-title{font-size:30px;font-weight:900;background:linear-gradient(135deg,#06b6d4,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'Poppins',sans-serif;margin-bottom:8px}.form-subtitle{color:rgba(255,255,255,0.8);font-size:13px}.form-group{margin-bottom:20px}label{display:block;margin-bottom:8px;color:rgba(255,255,255,0.95);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:1px}input,select,textarea{width:100%;padding:12px 16px;border:2px solid rgba(124,58,237,0.3);border-radius:12px;font-size:14px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.95);font-family:'Inter',sans-serif;transition:all 0.3s}input:focus,select:focus,textarea:focus{border-color:#7c3aed;outline:none;box-shadow:0 0 0 4px rgba(124,58,237,0.2);background:rgba(255,255,255,0.08)}input::placeholder,textarea::placeholder{color:rgba(255,255,255,0.5)}select{cursor:pointer}select option{background:#0f172a;color:white}.qty-control{display:flex;align-items:center;gap:15px;justify-content:center;margin-top:10px}.qty-btn{width:40px;height:40px;border:2px solid rgba(124,58,237,0.5);background:rgba(124,58,237,0.2);color:white;font-size:20px;font-weight:900;border-radius:10px;cursor:pointer;transition:all 0.3s}.qty-btn:hover{background:rgba(124,58,237,0.4);transform:scale(1.1)}.qty-display{font-size:28px;font-weight:900;color:rgba(6,182,212,1);min-width:50px;text-align:center;font-family:'Poppins',sans-serif}.names-section{margin-top:25px}.name-block{background:rgba(124,58,237,0.15);border:2px solid rgba(124,58,237,0.3);border-radius:16px;padding:20px;margin-bottom:15px;transition:all 0.3s}.name-block:hover{border-color:rgba(124,58,237,0.5);background:rgba(124,58,237,0.2)}.name-block-header{color:rgba(255,255,255,0.9);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;display:flex;align-items:center;gap:8px}.name-input{margin-bottom:15px}.customization-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.custom-group{display:flex;flex-direction:column;gap:6px}.custom-label{color:rgba(255,255,255,0.85);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}.custom-select{padding:10px 12px;font-size:13px;border-radius:10px}.price-display{background:linear-gradient(135deg,rgba(124,58,237,0.3),rgba(6,182,212,0.2));border:2px solid rgba(124,58,237,0.4);border-radius:18px;padding:25px;text-align:center;margin-bottom:20px}.price-label{color:rgba(255,255,255,0.7);font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:10px}.price-value-block{background:rgba(255,255,255,0.05);border:2px solid rgba(6,182,212,0.4);border-radius:14px;padding:16px 30px;display:flex;align-items:center;justify-content:center;gap:8px}.price-currency{color:rgba(6,182,212,1);font-size:24px;font-weight:700}.price-value{color:rgba(6,182,212,1);font-size:40px;font-weight:900;font-family:'Poppins',sans-serif}.button-group{display:flex;gap:12px;margin-top:25px}.submit-btn,.back-btn{flex:1;padding:14px;border:none;border-radius:12px;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;transition:all 0.3s;font-family:'Poppins',sans-serif}.submit-btn{background:linear-gradient(135deg,#7c3aed,#4f46e5);color:white;border:2px solid rgba(124,58,237,0.5)}.submit-btn:hover{transform:translateY(-3px);box-shadow:0 12px 35px rgba(124,58,237,0.5)}.back-btn{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.9);border:2px solid rgba(255,255,255,0.2)}.back-btn:hover{transform:translateY(-3px);background:rgba(255,255,255,0.12)}.status{margin-top:15px;padding:14px;border-radius:10px;text-align:center;font-weight:700;display:none;letter-spacing:0.5px}.success{background:rgba(34,197,94,0.2);color:#86efac;border:2px solid rgba(34,197,94,0.4)}.error{background:rgba(239,68,68,0.2);color:#fca5a5;border:2px solid rgba(239,68,68,0.4)}@media (max-width:768px){.logo{font-size:32px}.pricing-grid{grid-template-columns:1fr}.customization-grid{grid-template-columns:1fr}.button-group{flex-direction:column}.stats{grid-template-columns:1fr}}
+        *{margin:0;padding:0;box-sizing:border-box}body{background:linear-gradient(135deg,#0f172a 0%,#1e293b 25%,#312e81 50%,#4f46e5 100%);min-height:100vh;font-family:'Inter',sans-serif;overflow-x:hidden}.container{max-width:1200px;margin:0 auto;padding:20px}.header{text-align:center;margin-bottom:30px}.logo{font-size:42px;font-weight:900;background:linear-gradient(135deg,#06b6d4,#7c3aed,#4f46e5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;font-family:'Poppins',sans-serif;margin-bottom:8px}.tagline{color:rgba(255,255,255,0.9);font-size:15px;font-weight:600;letter-spacing:2px;font-family:'Poppins',sans-serif}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin-bottom:30px}.stat-card{background:rgba(255,255,255,0.08);backdrop-filter:blur(20px);border-radius:16px;padding:20px;text-align:center;border:1px solid rgba(124,58,237,0.3);transition:all 0.3s}.stat-card:hover{transform:translateY(-5px);background:rgba(255,255,255,0.12);border-color:rgba(124,58,237,0.5)}.stat-icon{font-size:32px;margin-bottom:8px}.stat-value{font-size:28px;font-weight:900;background:linear-gradient(135deg,#06b6d4,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'Poppins',sans-serif;margin-bottom:4px}.stat-label{color:rgba(255,255,255,0.8);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px}.pricing-info{background:rgba(255,255,255,0.08);backdrop-filter:blur(20px);border-radius:20px;padding:30px;margin-bottom:25px;border:1px solid rgba(124,58,237,0.3);text-align:center}.pricing-title{color:rgba(255,255,255,0.95);font-size:24px;font-weight:900;margin-bottom:20px;font-family:'Poppins',sans-serif}.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:20px}.price-item{background:rgba(124,58,237,0.2);border:2px solid rgba(124,58,237,0.4);border-radius:14px;padding:20px;transition:all 0.3s}.price-item:hover{transform:scale(1.05);border-color:rgba(124,58,237,0.6);background:rgba(124,58,237,0.3)}.price-qty{color:rgba(255,255,255,0.9);font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}.price-amount{font-size:36px;font-weight:900;background:linear-gradient(135deg,#06b6d4,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'Poppins',sans-serif}.price-detail{color:rgba(255,255,255,0.75);font-size:12px;margin-top:8px;font-weight:600}.price-note{color:rgba(255,255,255,0.7);font-size:13px;margin-top:15px;padding:15px;background:rgba(6,182,212,0.1);border-radius:10px;border:1px solid rgba(6,182,212,0.3)}.cta-btn{display:block;width:100%;max-width:400px;margin:0 auto 25px;padding:16px 40px;background:linear-gradient(135deg,#7c3aed,#4f46e5,#06b6d4);color:white;font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:2px;border:none;border-radius:14px;cursor:pointer;transition:all 0.3s;font-family:'Poppins',sans-serif;box-shadow:0 10px 30px rgba(124,58,237,0.4)}.cta-btn:hover{transform:translateY(-4px);box-shadow:0 15px 40px rgba(124,58,237,0.6)}.form-container{display:none;background:rgba(20,20,50,0.9);backdrop-filter:blur(25px);border-radius:25px;padding:35px;border:1px solid rgba(124,58,237,0.3)}.form-container.active{display:block}.form-header{text-align:center;margin-bottom:30px}.form-title{font-size:30px;font-weight:900;background:linear-gradient(135deg,#06b6d4,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'Poppins',sans-serif;margin-bottom:8px}.form-subtitle{color:rgba(255,255,255,0.8);font-size:13px}.form-group{margin-bottom:20px}label{display:block;margin-bottom:8px;color:rgba(255,255,255,0.95);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:1px}input,select,textarea{width:100%;padding:12px 16px;border:2px solid rgba(124,58,237,0.3);border-radius:12px;font-size:14px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.95);font-family:'Inter',sans-serif;transition:all 0.3s}input:focus,select:focus,textarea:focus{border-color:#7c3aed;outline:none;box-shadow:0 0 0 4px rgba(124,58,237,0.2);background:rgba(255,255,255,0.08)}input::placeholder,textarea::placeholder{color:rgba(255,255,255,0.5)}select{cursor:pointer}select option{background:#0f172a;color:white}.qty-control{display:flex;align-items:center;gap:15px;justify-content:center;margin-top:10px}.qty-btn{width:40px;height:40px;border:2px solid rgba(124,58,237,0.5);background:rgba(124,58,237,0.2);color:white;font-size:20px;font-weight:900;border-radius:10px;cursor:pointer;transition:all 0.3s}.qty-btn:hover{background:rgba(124,58,237,0.4);transform:scale(1.1)}.qty-display{font-size:28px;font-weight:900;color:rgba(6,182,212,1);min-width:50px;text-align:center;font-family:'Poppins',sans-serif}.names-section{margin-top:25px}.name-block{background:rgba(124,58,237,0.15);border:2px solid rgba(124,58,237,0.3);border-radius:16px;padding:20px;margin-bottom:15px;transition:all 0.3s}.name-block:hover{border-color:rgba(124,58,237,0.5);background:rgba(124,58,237,0.2)}.name-block-header{color:rgba(255,255,255,0.9);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;display:flex;align-items:center;gap:8px}.name-input{margin-bottom:15px}.customization-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.custom-group{display:flex;flex-direction:column;gap:6px}.custom-label{color:rgba(255,255,255,0.85);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}.custom-select{padding:10px 12px;font-size:13px;border-radius:10px}.price-display{background:linear-gradient(135deg,rgba(124,58,237,0.3),rgba(6,182,212,0.2));border:2px solid rgba(124,58,237,0.4);border-radius:18px;padding:25px;text-align:center;margin-bottom:20px}.price-label{color:rgba(255,255,255,0.7);font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:10px}.price-value-block{background:rgba(255,255,255,0.05);border:2px solid rgba(6,182,212,0.4);border-radius:14px;padding:16px 30px;display:flex;align-items:center;justify-content:center;gap:8px}.price-currency{color:rgba(6,182,212,1);font-size:24px;font-weight:700}.price-value{color:rgba(6,182,212,1);font-size:40px;font-weight:900;font-family:'Poppins',sans-serif}.button-group{display:flex;gap:12px;margin-top:25px}.submit-btn,.back-btn{flex:1;padding:14px;border:none;border-radius:12px;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;transition:all 0.3s;font-family:'Poppins',sans-serif}.submit-btn{background:linear-gradient(135deg,#7c3aed,#4f46e5);color:white;border:2px solid rgba(124,58,237,0.5)}.submit-btn:hover{transform:translateY(-3px);box-shadow:0 12px 35px rgba(124,58,237,0.5)}.back-btn{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.9);border:2px solid rgba(255,255,255,0.2)}.back-btn:hover{transform:translateY(-3px);background:rgba(255,255,255,0.12)}.status{margin-top:15px;padding:14px;border-radius:10px;text-align:center;font-weight:700;display:none;letter-spacing:0.5px}.success{background:rgba(34,197,94,0.2);color:#86efac;border:2px solid rgba(34,197,94,0.4)}.error{background:rgba(239,68,68,0.2);color:#fca5a5;border:2px solid rgba(239,68,68,0.4)}@media (max-width:768px){.logo{font-size:32px}.pricing-grid{grid-template-columns:1fr}.customization-grid{grid-template-columns:1fr}.button-group{flex-direction:column}.stats{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
@@ -46,18 +46,21 @@
                     <div class="price-item">
                         <div class="price-qty">1-2 Nomes</div>
                         <div class="price-amount">R$ 5</div>
+                        <div class="price-detail">R$ 5,00 cada nome</div>
                     </div>
                     <div class="price-item">
                         <div class="price-qty">3-4 Nomes</div>
                         <div class="price-amount">R$ 4</div>
+                        <div class="price-detail">R$ 4,00 cada nome</div>
                     </div>
                     <div class="price-item">
                         <div class="price-qty">5+ Nomes</div>
                         <div class="price-amount">R$ 3</div>
+                        <div class="price-detail">R$ 3,00 cada nome</div>
                     </div>
                 </div>
                 <div class="price-note">
-                    ✨ Acima de 5 nomes: R$ 3,00 cada bordado
+                    ✨ Quanto mais nomes, menor o preço unitário!
                 </div>
             </div>
 
@@ -132,6 +135,12 @@
             if (qty <= 2) return qty * 5;
             if (qty <= 4) return qty * 4;
             return qty * 3;
+        }
+
+        function getPricePerUnit(qty) {
+            if (qty <= 2) return 5;
+            if (qty <= 4) return 4;
+            return 3;
         }
 
         function updatePrice() {
@@ -227,7 +236,8 @@
             const clientName = document.getElementById('name').value;
             const contact = document.getElementById('contact').value;
             const details = document.getElementById('details').value || "Nenhuma observação";
-            const price = calculatePrice(quantity);
+            const totalPrice = calculatePrice(quantity);
+            const pricePerUnit = getPricePerUnit(quantity);
 
             let namesData = [];
             for (let i = 0; i < quantity; i++) {
@@ -237,29 +247,45 @@
                 namesData.push({ nome, fonte, tamanho });
             }
 
-            const namesText = namesData.map((n, i) => 
-                `**${i + 1}.** ${n.nome} | Fonte: ${n.fonte} | Tamanho: ${n.tamanho}`
+            const namesMarkdown = namesData.map((n, i) => 
+                `### 🧵 Bordado ${i + 1}\n` +
+                `> **Nome:** \`${n.nome}\`\n` +
+                `> **Fonte:** \`${n.fonte}\`\n` +
+                `> **Tamanho:** \`${n.tamanho}\`\n`
             ).join('\n');
 
             submitBtn.innerHTML = "ENVIANDO...";
             submitBtn.disabled = true;
 
+            const embedDescription = 
+                `## 📋 Resumo do Pedido\n\n` +
+                `**👤 Cliente:** ${clientName}\n` +
+                `**📱 Contato:** ${contact}\n` +
+                `**🔢 Quantidade:** ${quantity} ${quantity === 1 ? 'bordado' : 'bordados'}\n` +
+                `**💵 Preço Unitário:** R$ ${pricePerUnit.toFixed(2).replace('.', ',')}\n` +
+                `**💰 Valor Total:** R$ ${totalPrice.toFixed(2).replace('.', ',')}\n\n` +
+                `---\n\n` +
+                `## ✏️ Detalhes dos Bordados\n\n` +
+                `${namesMarkdown}\n` +
+                `---\n\n` +
+                `## 📝 Observações\n` +
+                `${details}`;
+
             const payload = {
                 username: "LKZ Matrizes Bot",
                 avatar_url: "https://cdn-icons-png.flaticon.com/512/3532/3532598.png",
                 embeds: [{
-                    title: "🧵 Novo Pedido de Bordado!",
+                    title: "🎉 NOVO PEDIDO DE BORDADO",
+                    description: embedDescription,
                     color: 8029939,
-                    fields: [
-                        { name: "👤 Cliente", value: clientName, inline: true },
-                        { name: "📱 Contato", value: contact, inline: true },
-                        { name: "🔢 Quantidade", value: `${quantity} ${quantity == 1 ? 'bordado' : 'bordados'}`, inline: true },
-                        { name: "💰 Valor Total", value: `R$ ${price.toFixed(2).replace('.', ',')}`, inline: true },
-                        { name: "✏️ Bordados Personalizados", value: namesText, inline: false },
-                        { name: "📝 Observações", value: details, inline: false }
-                    ],
-                    footer: { text: "LKZ Matrizes - Máquina de Bordar Profissional" },
-                    timestamp: new Date()
+                    footer: { 
+                        text: "LKZ Matrizes • Máquina de Bordar Profissional",
+                        icon_url: "https://cdn-icons-png.flaticon.com/512/3532/3532598.png"
+                    },
+                    timestamp: new Date(),
+                    thumbnail: {
+                        url: "https://cdn-icons-png.flaticon.com/512/3532/3532598.png"
+                    }
                 }]
             };
 
