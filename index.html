@@ -1,302 +1,149 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<! DOCTYPE html>
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LKZ Matrizes - Sistema de Pedidos</title>
+    <title>LKZ Matrizes - Máquina de Bordar Profissional</title>
     <style>
+        : root {
+            --primary:  #4f46e5;
+            --secondary: #7c3aed;
+            --tertiary: #06b6d4;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --light: #f0f4ff;
+        }
+
         * {
             margin: 0;
-            padding: 0;
+            padding:  0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f4f4f4;
+            background:  linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #312e81 50%, #4f46e5 100%);
+            min-height:  100vh;
+            overflow-x: hidden;
+            position: relative;
         }
 
-        header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 2rem 0;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        nav {
-            background-color: #333;
-            padding: 1rem;
-            position: sticky;
+        . floating-orbs {
+            position: fixed;
+            width: 100%;
+            height:  100%;
             top: 0;
-            z-index: 100;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
         }
 
-        nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 2rem;
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(124, 58, 237, 0.8), rgba(79, 70, 229, 0.4));
+            box-shadow: 0 0 80px rgba(124, 58, 237, 0.6), inset 0 0 60px rgba(255, 255, 255, 0.15);
+            animation: float 20s infinite ease-in-out;
+            filter: blur(3px);
         }
 
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
+        . orb:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 5%;
+            left: 5%;
+            animation-delay: 0s;
+            animation-duration: 25s;
         }
 
-        nav a:hover {
-            color: #667eea;
+        . orb:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 50%;
+            right: 5%;
+            animation-delay: 3s;
+            animation-duration:  30s;
+            background: radial-gradient(circle at 30% 30%, rgba(6, 182, 212, 0.7), rgba(6, 182, 212, 0.3));
+            box-shadow: 0 0 80px rgba(6, 182, 212, 0.5), inset 0 0 60px rgba(255, 255, 255, 0.15);
         }
 
-        main {
+        .orb:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            bottom: 10%;
+            left: 15%;
+            animation-delay: 5s;
+            animation-duration:  22s;
+            background: radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.7), rgba(139, 92, 246, 0.3));
+            box-shadow: 0 0 80px rgba(139, 92, 246, 0.5), inset 0 0 60px rgba(255, 255, 255, 0.15);
+        }
+
+        .orb:nth-child(4) {
+            width:  250px;
+            height: 250px;
+            top: 30%;
+            right: 20%;
+            animation-delay: 2s;
+            animation-duration:  28s;
+            background: radial-gradient(circle at 30% 30%, rgba(79, 70, 229, 0.6), rgba(79, 70, 229, 0.2));
+            box-shadow: 0 0 80px rgba(79, 70, 229, 0.4), inset 0 0 60px rgba(255, 255, 255, 0.15);
+        }
+
+        .orb:nth-child(5) {
+            width: 180px;
+            height: 180px;
+            bottom: 20%;
+            right: 30%;
+            animation-delay: 7s;
+            animation-duration: 26s;
+            background: radial-gradient(circle at 30% 30%, rgba(6, 182, 212, 0.6), rgba(6, 182, 212, 0.2));
+            box-shadow: 0 0 80px rgba(6, 182, 212, 0.4), inset 0 0 60px rgba(255, 255, 255, 0.15);
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform:  translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(60px, -60px) scale(1.1);
+            }
+            50% {
+                transform: translate(-40px, 80px) scale(0.9);
+            }
+            75% {
+                transform: translate(50px, 40px) scale(1.05);
+            }
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform:  translateY(-60px) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        . container {
+            position: relative;
+            z-index: 10;
             max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        section {
-            background: white;
-            margin-bottom: 2rem;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        section h2 {
-            color: #667eea;
-            margin-bottom: 1.5rem;
-            font-size: 2rem;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 0.5rem;
-        }
-
-        .order-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-
-        .form-group {
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-        .form-group label {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #333;
+        .dashboard {
+            width: 100%;
+            animation: fadeIn 1s ease-out;
         }
 
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            padding: 0.8rem;
-            border: 2px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-            font-family: inherit;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
-        }
-
-        .form-group textarea {
-            grid-column: 1 / -1;
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .product-card {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 1.5rem;
-            border-radius: 8px;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .product-card h3 {
-            color: #667eea;
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
-        }
-
-        .product-price {
-            font-size: 1.5rem;
-            color: #764ba2;
-            font-weight: bold;
-            margin: 1rem 0;
-        }
-
-        .product-description {
-            color: #666;
-            font-size: 0.95rem;
-            margin-bottom: 1rem;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 0.8rem 2rem;
-            border: none;
-            border-radius: 4px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.3s ease, transform 0.2s ease;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-        }
-
-        .btn:hover {
-            opacity: 0.9;
-            transform: scale(1.05);
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        .btn-secondary {
-            background: #667eea;
-        }
-
-        .order-summary {
-            background: #f9f9f9;
-            padding: 1.5rem;
-            border-left: 4px solid #667eea;
-            border-radius: 4px;
-            margin-top: 1.5rem;
-        }
-
-        .summary-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .summary-item:last-child {
-            border-bottom: none;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #667eea;
-            margin-top: 0.5rem;
-            padding-top: 1rem;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .status-pending {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-
-        .status-approved {
-            background-color: #d4edda;
-            color: #155724;
-        }
-
-        .status-delivered {
-            background-color: #cce5ff;
-            color: #004085;
-        }
-
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 3rem;
-        }
-
-        .contact-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 1.5rem;
-        }
-
-        .contact-item {
-            background: #f9f9f9;
-            padding: 1.5rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .contact-item h3 {
-            color: #667eea;
-            margin-bottom: 0.5rem;
-        }
-
-        .contact-item p {
-            color: #666;
-        }
-
-        @media (max-width: 768px) {
-            .order-form {
-                grid-template-columns: 1fr;
-            }
-
-            nav ul {
-                gap: 1rem;
-                justify-content: space-around;
-            }
-
-            header h1 {
-                font-size: 1.8rem;
-            }
-
-            main {
-                padding: 0 0.5rem;
-            }
-
-            section {
-                padding: 1.5rem;
-            }
-        }
-
-        @keyframes slideIn {
+        @keyframes fadeIn {
             from {
                 opacity: 0;
                 transform: translateY(20px);
@@ -307,269 +154,709 @@
             }
         }
 
-        section {
-            animation: slideIn 0.5s ease-out;
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        . logo {
+            font-size: 56px;
+            font-weight:  900;
+            background: linear-gradient(135deg, #06b6d4 0%, #7c3aed 50%, #4f46e5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 6px;
+            margin-bottom: 10px;
+            animation: slideInDown 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-shadow: 0 4px 30px rgba(124, 58, 237, 0.3);
+        }
+
+        .tagline {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 18px;
+            font-weight: 300;
+            letter-spacing: 3px;
+            animation: fadeIn 1.5s ease-out 0.3s backwards;
+            margin-bottom: 10px;
+        }
+
+        . description {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 16px;
+            font-weight:  400;
+            letter-spacing: 1px;
+            animation: fadeIn 1.5s ease-out 0.4s backwards;
+        }
+
+        .pricing-section {
+            margin-bottom: 50px;
+        }
+
+        . pricing-title {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 32px;
+            font-weight:  900;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+            place-items: center;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(25px);
+            border-radius:  28px;
+            padding: 50px 40px;
+            text-align: center;
+            border: 2px solid rgba(124, 58, 237, 0.3);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4), inset 0 0 30px rgba(255, 255, 255, 0.08);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pricing-card:: before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+            animation: rotate 12s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .pricing-card: hover {
+            transform: translateY(-15px) scale(1.08);
+            box-shadow: 0 40px 100px rgba(124, 58, 237, 0.4), inset 0 0 40px rgba(255, 255, 255, 0.12);
+            border-color: rgba(124, 58, 237, 0.5);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .pricing-number {
+            position: relative;
+            z-index: 2;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .price-block {
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.3), rgba(6, 182, 212, 0.2));
+            border:  2px solid rgba(124, 58, 237, 0.4);
+            border-radius: 20px;
+            padding: 30px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .pricing-currency {
+            font-size: 32px;
+            font-weight:  700;
+            color: rgba(6, 182, 212, 1);
+        }
+
+        .pricing-price {
+            font-size: 56px;
+            font-weight:  900;
+            background: linear-gradient(135deg, #06b6d4, #7c3aed);
+            -webkit-background-clip:  text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pricing-label {
+            position: relative;
+            z-index: 2;
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+        }
+
+        .cta-button {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            margin:  0 auto 30px;
+            padding: 28px 60px;
+            background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 50%, #06b6d4 100%);
+            color: white;
+            font-size: 22px;
+            font-weight:  900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 20px 50px rgba(124, 58, 237, 0.6), inset 0 -5px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button:: before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background:  rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        . cta-button:hover {
+            transform: translateY(-8px) scale(1.08);
+            box-shadow: 0 30px 70px rgba(124, 58, 237, 0.8), inset 0 -5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-button:active {
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        .form-container {
+            display: none;
+            background: rgba(20, 20, 50, 0.85);
+            backdrop-filter: blur(30px);
+            border-radius:  35px;
+            padding: 55px;
+            max-width: 650px;
+            margin: 0 auto;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(124, 58, 237, 0.15);
+            border: 2px solid rgba(124, 58, 237, 0.3);
+            animation: slideUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px) scale(0.85);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .form-container.active {
+            display: block;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        . form-title {
+            font-size: 40px;
+            font-weight:  900;
+            background: linear-gradient(135deg, #06b6d4, #7c3aed, #4f46e5);
+            -webkit-background-clip:  text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            letter-spacing: 3px;
+        }
+
+        .form-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+
+        .form-group {
+            margin-bottom: 28px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 12px;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 700;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid rgba(124, 58, 237, 0.3);
+            border-radius:  18px;
+            font-size:  16px;
+            transition:  all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        input:: placeholder, textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        select option {
+            background: #0f172a;
+            color:  white;
+        }
+
+        input: focus, textarea:focus, select: focus {
+            border-color: #7c3aed;
+            outline: none;
+            box-shadow: 0 0 0 8px rgba(124, 58, 237, 0.2), 0 0 20px rgba(124, 58, 237, 0.4);
+            background: rgba(255, 255, 255, 0.08);
+            transform: scale(1.02);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 130px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .price-display {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.25), rgba(6, 182, 212, 0.15));
+            border:  2px solid rgba(124, 58, 237, 0.3);
+            border-radius: 20px;
+            padding: 35px;
+            text-align:  center;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        . price-display.active {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.35), rgba(6, 182, 212, 0.25));
+            border-color: rgba(124, 58, 237, 0.6);
+            box-shadow: 0 0 30px rgba(124, 58, 237, 0.3);
+        }
+
+        .price-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        . price-value-block {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(6, 182, 212, 0.4);
+            border-radius: 18px;
+            padding: 22px 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .price-currency-display {
+            color: rgba(6, 182, 212, 1);
+            font-size: 32px;
+            font-weight:  700;
+        }
+
+        .price-value {
+            color: rgba(6, 182, 212, 1);
+            font-size: 52px;
+            font-weight:  900;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 18px;
+            margin-top: 35px;
+        }
+
+        . submit-btn, .back-btn {
+            flex: 1;
+            padding:  18px;
+            border: none;
+            border-radius: 18px;
+            font-size: 16px;
+            font-weight:  900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+            color:  white;
+            border: 2px solid rgba(124, 58, 237, 0.5);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 18px 50px rgba(124, 58, 237, 0.5);
+            border-color: #7c3aed;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-4px);
+            box-shadow:  0 18px 50px rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .status {
+            margin-top: 25px;
+            padding: 18px;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: 700;
+            display: none;
+            letter-spacing: 1px;
+        }
+
+        .success {
+            background: rgba(34, 197, 94, 0.2);
+            color: #86efac;
+            border: 2px solid rgba(34, 197, 94, 0.4);
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border:  2px solid rgba(239, 68, 68, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 42px;
+            }
+
+            .pricing-title {
+                font-size: 26px;
+            }
+
+            . pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card {
+                max-width: 100%;
+            }
+
+            .price-block {
+                padding: 25px 30px;
+            }
+
+            . pricing-price {
+                font-size: 42px;
+            }
+
+            . pricing-currency {
+                font-size: 24px;
+            }
+
+            .cta-button {
+                font-size: 18px;
+                padding: 22px 45px;
+            }
+
+            . form-container {
+                padding: 35px 25px;
+            }
+
+            . button-group {
+                flex-direction: column;
+            }
+
+            .form-title {
+                font-size: 32px;
+            }
+
+            . price-value-block {
+                padding: 18px 35px;
+            }
+
+            .price-currency-display {
+                font-size: 26px;
+            }
+
+            .price-value {
+                font-size: 42px;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>🔧 LKZ Matrizes</h1>
-        <p>Sistema de Pedidos - Soluções em Matrizes de Precisão</p>
-    </header>
+    <div class="floating-orbs">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+    </div>
 
-    <nav>
-        <ul>
-            <li><a href="#pedidos">Novo Pedido</a></li>
-            <li><a href="#produtos">Produtos</a></li>
-            <li><a href="#meus-pedidos">Meus Pedidos</a></li>
-            <li><a href="#contato">Contato</a></li>
-        </ul>
-    </nav>
+    <div class="container">
+        <div class="dashboard" id="dashboard">
+            <div class="header">
+                <h1 class="logo">LKZ MATRIZES</h1>
+                <p class="tagline">MÁQUINA DE BORDAR PROFISSIONAL</p>
+                <p class="description">Bordados de Nomes de Alta Qualidade</p>
+            </div>
 
-    <main>
-        <!-- Seção de Novo Pedido -->
-        <section id="pedidos">
-            <h2>📝 Realizar Novo Pedido</h2>
-            <form class="order-form" id="orderForm">
+            <div class="pricing-section">
+                <h2 class="pricing-title">💎 TABELA DE PREÇOS</h2>
+
+                <div class="pricing-grid">
+                    <div class="pricing-card">
+                        <div class="pricing-number">1 NOME</div>
+                        <div class="price-block">
+                            <span class="pricing-currency">R$</span>
+                            <span class="pricing-price">5</span>
+                        </div>
+                        <div class="pricing-label">Por Bordado</div>
+                    </div>
+
+                    <div class="pricing-card">
+                        <div class="pricing-number">3 NOMES</div>
+                        <div class="price-block">
+                            <span class="pricing-currency">R$</span>
+                            <span class="pricing-price">10</span>
+                        </div>
+                        <div class="pricing-label">Combo Especial</div>
+                    </div>
+
+                    <div class="pricing-card">
+                        <div class="pricing-number">5 NOMES</div>
+                        <div class="price-block">
+                            <span class="pricing-currency">R$</span>
+                            <span class="pricing-price">15</span>
+                        </div>
+                        <div class="pricing-label">Melhor Valor</div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="cta-button" id="fazerPedidoBtn">
+                ✨ FAZER PEDIDO AGORA
+            </button>
+        </div>
+
+        <div class="form-container" id="formContainer">
+            <div class="form-header">
+                <h2 class="form-title">NOVO BORDADO</h2>
+                <p class="form-subtitle">Solicite seu bordado de nomes personalizado</p>
+            </div>
+
+            <form id="orderForm">
                 <div class="form-group">
-                    <label for="clientName">Nome do Cliente *</label>
-                    <input type="text" id="clientName" name="clientName" required>
+                    <label for="name">👤 Nome Completo</label>
+                    <input type="text" id="name" placeholder="Digite seu nome completo" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="clientEmail">Email *</label>
-                    <input type="email" id="clientEmail" name="clientEmail" required>
+                    <label for="contact">📱 Contato</label>
+                    <input type="text" id="contact" placeholder="@telegram ou (XX) 99999-9999" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="clientPhone">Telefone *</label>
-                    <input type="tel" id="clientPhone" name="clientPhone" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="company">Empresa</label>
-                    <input type="text" id="company" name="company">
-                </div>
-
-                <div class="form-group">
-                    <label for="product">Selecione o Produto *</label>
-                    <select id="product" name="product" required>
-                        <option value="">-- Escolha um produto --</option>
-                        <option value="matriz-corte">Matriz de Corte</option>
-                        <option value="matriz-dobra">Matriz de Dobra</option>
-                        <option value="matriz-estampo">Matriz de Estampo</option>
-                        <option value="matriz-injeção">Matriz de Injeção</option>
-                        <option value="personalizado">Personalizado</option>
+                    <label for="quantity">🔢 Quantidade de Nomes</label>
+                    <select id="quantity" required onchange="updatePrice()">
+                        <option value="">Selecione a quantidade... </option>
+                        <option value="1">1 Nome</option>
+                        <option value="3">3 Nomes</option>
+                        <option value="5">5 Nomes</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="quantity">Quantidade *</label>
-                    <input type="number" id="quantity" name="quantity" min="1" value="1" required>
+                    <label for="nomesBordado">✏️ Nome(s) para Bordar</label>
+                    <textarea id="nomesBordado" placeholder="Digite os nomes que deseja bordar (separados por vírgula)" required></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="specifications">Especificações Técnicas</label>
-                    <textarea id="specifications" name="specifications" placeholder="Descreva as especificações, dimensões, materiais, etc."></textarea>
+                    <label for="details">📝 Detalhes Adicionais (Opcional)</label>
+                    <textarea id="details" placeholder="Cor da linha, observações especiais... "></textarea>
                 </div>
 
-                <div class="form-group">
-                    <label for="deadline">Prazo de Entrega Desejado</label>
-                    <input type="date" id="deadline" name="deadline">
+                <div class="price-display" id="priceDisplay">
+                    <div class="price-label">Preço Total</div>
+                    <div class="price-value-block">
+                        <span class="price-currency-display">R$</span>
+                        <span class="price-value">0,00</span>
+                    </div>
                 </div>
 
-                <button type="submit" class="btn" style="grid-column: 1 / -1;">Enviar Pedido</button>
+                <div class="button-group">
+                    <button type="button" class="back-btn" id="voltarBtn">← VOLTAR</button>
+                    <button type="submit" class="submit-btn" id="submitBtn">ENVIAR PEDIDO</button>
+                </div>
+
+                <div id="statusMessage" class="status"></div>
             </form>
-
-            <div class="order-summary">
-                <h3>Resumo do Pedido</h3>
-                <div class="summary-item">
-                    <span>Produto:</span>
-                    <span id="summaryProduct">-</span>
-                </div>
-                <div class="summary-item">
-                    <span>Quantidade:</span>
-                    <span id="summaryQuantity">-</span>
-                </div>
-                <div class="summary-item">
-                    <span>Total Estimado:</span>
-                    <span id="summaryTotal">R$ 0,00</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Seção de Produtos -->
-        <section id="produtos">
-            <h2>📦 Nossos Produtos</h2>
-            <div class="products-grid">
-                <div class="product-card">
-                    <h3>Matriz de Corte</h3>
-                    <p class="product-description">Precisão máxima para corte de materiais diversos</p>
-                    <div class="product-price">A partir de R$ 500,00</div>
-                    <button class="btn btn-secondary">Solicitar Orçamento</button>
-                </div>
-
-                <div class="product-card">
-                    <h3>Matriz de Dobra</h3>
-                    <p class="product-description">Ideal para dobramento de chapas e materiais</p>
-                    <div class="product-price">A partir de R$ 750,00</div>
-                    <button class="btn btn-secondary">Solicitar Orçamento</button>
-                </div>
-
-                <div class="product-card">
-                    <h3>Matriz de Estampo</h3>
-                    <p class="product-description">Estampagem de alta qualidade e durabilidade</p>
-                    <div class="product-price">A partir de R$ 1.200,00</div>
-                    <button class="btn btn-secondary">Solicitar Orçamento</button>
-                </div>
-
-                <div class="product-card">
-                    <h3>Matriz de Injeção</h3>
-                    <p class="product-description">Moldagem por injeção com tolerância ultra-fina</p>
-                    <div class="product-price">A partir de R$ 2.500,00</div>
-                    <button class="btn btn-secondary">Solicitar Orçamento</button>
-                </div>
-
-                <div class="product-card">
-                    <h3>Soluções Personalizadas</h3>
-                    <p class="product-description">Matrizes feitas sob medida conforme suas necessidades</p>
-                    <div class="product-price">Sob Consulta</div>
-                    <button class="btn btn-secondary">Falar com Especialista</button>
-                </div>
-
-                <div class="product-card">
-                    <h3>Manutenção e Reparo</h3>
-                    <p class="product-description">Serviço de manutenção preventiva e corretiva</p>
-                    <div class="product-price">A partir de R$ 200,00</div>
-                    <button class="btn btn-secondary">Agendar Visita</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Seção de Meus Pedidos -->
-        <section id="meus-pedidos">
-            <h2>📋 Meus Pedidos</h2>
-            <table style="width: 100%; border-collapse: collapse;">
-                <thead>
-                    <tr style="background-color: #f0f0f0;">
-                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #667eea;">Pedido #</th>
-                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #667eea;">Produto</th>
-                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #667eea;">Data</th>
-                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #667eea;">Valor</th>
-                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #667eea;">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr style="border-bottom: 1px solid #ddd;">
-                        <td style="padding: 1rem;">#001</td>
-                        <td style="padding: 1rem;">Matriz de Corte</td>
-                        <td style="padding: 1rem;">15/12/2025</td>
-                        <td style="padding: 1rem;">R$ 750,00</td>
-                        <td style="padding: 1rem;"><span class="status-badge status-approved">✓ Aprovado</span></td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid #ddd;">
-                        <td style="padding: 1rem;">#002</td>
-                        <td style="padding: 1rem;">Matriz de Injeção</td>
-                        <td style="padding: 1rem;">10/12/2025</td>
-                        <td style="padding: 1rem;">R$ 3.200,00</td>
-                        <td style="padding: 1rem;"><span class="status-badge status-pending">⏳ Pendente</span></td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 1rem;">#003</td>
-                        <td style="padding: 1rem;">Matriz de Dobra</td>
-                        <td style="padding: 1rem;">01/12/2025</td>
-                        <td style="padding: 1rem;">R$ 1.100,00</td>
-                        <td style="padding: 1rem;"><span class="status-badge status-delivered">📦 Entregue</span></td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-
-        <!-- Seção de Contato -->
-        <section id="contato">
-            <h2>📞 Contato</h2>
-            <p>Entre em contato conosco para mais informações, orçamentos ou dúvidas sobre nossos produtos e serviços.</p>
-            
-            <div class="contact-info">
-                <div class="contact-item">
-                    <h3>📧 Email</h3>
-                    <p><a href="mailto:contato@lkzmatrizes.com.br" style="color: #667eea; text-decoration: none;">contato@lkzmatrizes.com.br</a></p>
-                </div>
-
-                <div class="contact-item">
-                    <h3>📱 Telefone</h3>
-                    <p><a href="tel:+5511999999999" style="color: #667eea; text-decoration: none;">+55 (11) 9999-9999</a></p>
-                </div>
-
-                <div class="contact-item">
-                    <h3>🏢 Endereço</h3>
-                    <p>São Paulo - SP, Brasil<br>CNPJ: 00.000.000/0000-00</p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 LKZ Matrizes. Todos os direitos reservados.</p>
-        <p>Desenvolvido com ❤️ para excelência em matrizes de precisão</p>
-    </footer>
+        </div>
+    </div>
 
     <script>
-        // Atualizar resumo do pedido
-        document.getElementById('product').addEventListener('change', updateSummary);
-        document.getElementById('quantity').addEventListener('change', updateSummary);
+        const DISCORD_WEBHOOK_URL = "SUA_URL_DO_WEBHOOK_AQUI";
 
-        function updateSummary() {
-            const productSelect = document.getElementById('product');
-            const quantityInput = document.getElementById('quantity');
-            
-            const productText = productSelect.options[productSelect.selectedIndex].text;
-            const quantity = quantityInput.value;
+        const prices = {
+            1: 5,
+            3: 10,
+            5: 15
+        };
 
-            document.getElementById('summaryProduct').textContent = productText || '-';
-            document.getElementById('summaryQuantity').textContent = quantity || '-';
+        const dashboard = document.getElementById('dashboard');
+        const formContainer = document.getElementById('formContainer');
+        const fazerPedidoBtn = document.getElementById('fazerPedidoBtn');
+        const voltarBtn = document.getElementById('voltarBtn');
 
-            // Cálculo estimado de preço
-            const prices = {
-                'matriz-corte': 500,
-                'matriz-dobra': 750,
-                'matriz-estampo': 1200,
-                'matriz-injeção': 2500
-            };
+        fazerPedidoBtn.addEventListener('click', () => {
+            dashboard.style.display = 'none';
+            formContainer.classList.add('active');
+        });
 
-            const price = prices[productSelect.value] || 0;
-            const total = price * quantity;
+        voltarBtn.addEventListener('click', () => {
+            formContainer.classList.remove('active');
+            setTimeout(() => {
+                dashboard.style.display = 'block';
+            }, 300);
+        });
 
-            document.getElementById('summaryTotal').textContent = 
-                total > 0 ? `R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'R$ 0,00';
+        function updatePrice() {
+            const quantity = document.getElementById('quantity').value;
+            const priceDisplay = document.getElementById('priceDisplay');
+            const priceValue = priceDisplay.querySelector('.price-value');
+
+            if (quantity) {
+                const price = prices[quantity];
+                priceValue. textContent = price. toFixed(2).replace('. ', ',');
+                priceDisplay.classList.add('active');
+            } else {
+                priceValue.textContent = '0,00';
+                priceDisplay.classList.remove('active');
+            }
         }
 
-        // Submeter formulário
         document.getElementById('orderForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Pedido recebido com sucesso! Entraremos em contato em breve para confirmação.');
-            this.reset();
-            updateSummary();
-        });
 
-        // Botões de produtos
-        document.querySelectorAll('.btn-secondary').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                alert('Você será redirecionado para o formulário de orçamento.');
-                document.getElementById('orderForm').scrollIntoView({ behavior: 'smooth' });
-            });
-        });
+            const btn = document.getElementById('submitBtn');
+            const statusDiv = document.getElementById('statusMessage');
 
-        // Scroll suave para links de navegação
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
+            const name = document.getElementById('name').value;
+            const contact = document. getElementById('contact').value;
+            const quantity = document.getElementById('quantity').value;
+            const nomesBordado = document.getElementById('nomesBordado').value;
+            const details = document.getElementById('details').value || "Nenhum detalhe adicional. ";
+            const price = prices[quantity];
+
+            btn.innerHTML = "ENVIANDO...";
+            btn.disabled = true;
+
+            const payload = {
+                username: "LKZ Matrizes Bot",
+                avatar_url: "https://cdn-icons-png.flaticon.com/512/3532/3532598.png",
+                embeds: [
+                    {
+                        title: "🧵 Novo Pedido de Bordado! ",
+                        color: 8029939,
+                        fields: [
+                            { name: "👤 Cliente", value: name, inline: true },
+                            { name: "📱 Contato", value: contact, inline: true },
+                            { name: "🔢 Quantidade", value: `${quantity} ${quantity == 1 ? 'Nome' : 'Nomes'}`, inline: true },
+                            { name: "💰 Preço", value: `R$ ${price.toFixed(2).replace('.', ',')}`, inline: true },
+                            { name: "✏️ Nomes", value: nomesBordado, inline: false },
+                            { name: "📝 Detalhes", value: details }
+                        ],
+                        footer: {
+                            text: "LKZ Matrizes - Máquina de Bordar Profissional"
+                        },
+                        timestamp: new Date()
+                    }
+                ]
+            };
+
+            fetch(DISCORD_WEBHOOK_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (response.ok) {
+                    statusDiv.innerHTML = "✅ Pedido enviado com sucesso!";
+                    statusDiv.className = "status success";
+                    statusDiv.style.display = "block";
+                    document.getElementById('orderForm').reset();
+                    setTimeout(() => {
+                        statusDiv.style.display = "none";
+                        formContainer.classList.remove('active');
+                        setTimeout(() => {
+                            dashboard. style.display = 'block';
+                        }, 300);
+                    }, 3000);
+                } else {
+                    throw new Error('Erro no envio');
                 }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                statusDiv.innerHTML = "❌ Erro ao enviar.  Verifique sua conexão ou contate o admin.";
+                statusDiv.className = "status error";
+                statusDiv.style.display = "block";
+            })
+            .finally(() => {
+                btn.innerHTML = "ENVIAR PEDIDO";
+                btn.disabled = false;
             });
         });
     </script>
