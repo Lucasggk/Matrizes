@@ -1,110 +1,117 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LKZ Matrizes</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        *{margin:0;padding:0;box-sizing:border-box}body{background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);min-height:100vh;font-family:'Inter',sans-serif;color:#fff;overflow-x:hidden}.container{max-width:1200px;margin:0 auto;padding:20px}.page{display:none}.page.active{display:block}.header{text-align:center;margin-bottom:30px}.logo{font-size:42px;font-weight:900;background:linear-gradient(135deg,#06b6d4,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'Poppins',sans-serif}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin-bottom:30px}.stat-card{background:rgba(255,255,255,0.08);border-radius:16px;padding:20px;text-align:center;border:1px solid rgba(124,58,237,0.3)}.stat-value{font-size:28px;font-weight:900;color:#06b6d4}.card{background:rgba(20,20,50,0.9);border-radius:25px;padding:35px;border:1px solid rgba(124,58,237,0.3);margin-bottom:20px}input,textarea{width:100%;padding:12px;margin:10px 0;border-radius:10px;border:1px solid #4f46e5;background:rgba(255,255,255,0.05);color:#fff}.cta-btn,.submit-btn{width:100%;padding:16px;background:linear-gradient(135deg,#7c3aed,#06b6d4);border:none;border-radius:14px;color:#fff;font-weight:bold;cursor:pointer;text-transform:uppercase;margin-top:10px}.nav-link{color:#06b6d4;cursor:pointer;display:block;text-align:center;margin-top:15px}.rating{display:flex;flex-direction:row-reverse;justify-content:center;gap:10px;margin:20px 0}.rating input{display:none}.rating label{font-size:40px;color:rgba(255,255,255,0.2);cursor:pointer}.rating input:checked~label{color:#fbbf24}.comments-box{max-height:200px;overflow-y:auto;background:rgba(0,0,0,0.2);padding:15px;border-radius:10px}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LKZ Matrizes</title>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<style>
+body{margin:0;font-family:Inter,Arial;background:#0f172a;color:#fff}
+nav{display:flex;gap:15px;padding:15px;background:#111827}
+nav a{color:#fff;text-decoration:none;font-weight:700}
+.page{display:none;padding:30px}
+.active{display:block}
+.card{background:#1e293b;padding:20px;border-radius:15px;margin-bottom:20px}
+input,textarea,button{width:100%;padding:10px;border-radius:10px;border:none;margin-top:10px}
+button{background:#6366f1;color:#fff;font-weight:800;cursor:pointer}
+.stat{font-size:22px;font-weight:900}
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header"><h1 class="logo">LKZ MATRIZES</h1></div>
 
-        <div id="page-Inicio" class="page">
-            <div class="stats">
-                <div class="stat-card"><div class="stat-value" id="db-pedidos">0</div><div>Pedidos</div></div>
-                <div class="stat-card"><div class="stat-value" id="db-nota">0.0</div><div>Média</div></div>
-                <div class="stat-card"><div class="stat-value" id="db-total-notas">0</div><div>Avaliações</div></div>
-            </div>
-            <div class="card">
-                <h3>Está satisfeito com nosso trabalho?</h3>
-                <button class="cta-btn" onclick="nav('/Compra')">Fazer Pedido</button>
-                <button class="cta-btn" style="background:none;border:1px solid #7c3aed" onclick="nav('/Avaliar')">Avaliar</button>
-            </div>
-            <div class="card">
-                <h3>Comentários</h3>
-                <div id="comments-list" class="comments-box"></div>
-            </div>
-        </div>
+<nav>
+<a href="/Matrizes/Inicio">Inicio</a>
+<a href="/Matrizes/Compra">Compra</a>
+<a href="/Matrizes/Avaliar">Avaliar</a>
+<a href="/Matrizes/Adm">Adm</a>
+</nav>
 
-        <div id="page-Compra" class="page">
-            <div class="card">
-                <h2>Solicitar Matriz</h2>
-                <input type="text" id="c-nome" placeholder="Nome">
-                <input type="text" id="c-zap" placeholder="WhatsApp">
-                <textarea id="c-obs" placeholder="Detalhes..."></textarea>
-                <button class="submit-btn" onclick="alert('Pedido enviado!')">Enviar</button>
-                <span class="nav-link" onclick="nav('/Inicio')">Voltar</span>
-            </div>
-        </div>
+<div id="Inicio" class="page">
+<div class="card">
+<h1>LKZ MATRIZES</h1>
+<p id="satisfacaoTxt"></p>
+<p>Média de Avaliações: <span class="stat" id="media"></span></p>
+<p>Total de Avaliações: <span class="stat" id="totalAval"></span></p>
+<p>Total de Pedidos: <span class="stat" id="pedidos"></span></p>
+</div>
+</div>
 
-        <div id="page-Avaliar" class="page">
-            <div class="card">
-                <h2>Avaliar</h2>
-                <div class="rating">
-                    <input type="radio" name="star" id="s5" value="5"><label for="s5">★</label>
-                    <input type="radio" name="star" id="s4" value="4"><label for="s4">★</label>
-                    <input type="radio" name="star" id="s3" value="3"><label for="s3">★</label>
-                    <input type="radio" name="star" id="s2" value="2"><label for="s2">★</label>
-                    <input type="radio" name="star" id="s1" value="1"><label for="s1">★</label>
-                </div>
-                <textarea id="e-msg" placeholder="Comentário..."></textarea>
-                <button class="submit-btn" onclick="sendEval()">Enviar</button>
-            </div>
-        </div>
+<div id="Compra" class="page">
+<div class="card">
+<h2>Compra</h2>
+<p>Entre em contato para realizar seu pedido</p>
+</div>
+</div>
 
-        <div id="page-Adm" class="page">
-            <div class="card">
-                <h2>ADM</h2>
-                <input type="number" id="adm-p" placeholder="Add Pedidos">
-                <button class="submit-btn" onclick="upAdm()">Atualizar</button>
-                <span class="nav-link" onclick="nav('/Inicio')">Sair</span>
-            </div>
-        </div>
-    </div>
+<div id="Avaliar" class="page">
+<div class="card">
+<h2>Avaliar Serviço</h2>
+<input type="number" id="nota" min="0" max="5" placeholder="Nota 0 a 5">
+<textarea id="comentario" placeholder="Comentário opcional"></textarea>
+<button onclick="enviarAvaliacao()">Enviar Avaliação</button>
+</div>
+</div>
 
-    <script>
-        const U = "https://dados-e6625-default-rtdb.firebaseio.com/";
-        function nav(p){window.history.pushState({},"",p);route()}
-        function route(){
-            const p = window.location.pathname.split('/').pop()||"Inicio";
-            document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
-            const t = document.getElementById(`page-${p}`);
-            if(t)t.classList.add('active'); else document.getElementById('page-Inicio').classList.add('active');
-            if(p==="Inicio")load();
-        }
-        window.onpopstate=route;
-        window.onload=route;
-        async function load(){
-            const r=await fetch(`${U}.json`);
-            const d=await r.json();
-            if(!d){await fetch(`${U}.json`,{method:'PUT',body:JSON.stringify({pedidos:0,soma:0,total:0})});return load()}
-            document.getElementById('db-pedidos').innerText=d.pedidos||0;
-            document.getElementById('db-nota').innerText=((d.soma/d.total)||0).toFixed(1);
-            document.getElementById('db-total-notas').innerText=d.total||0;
-            const c=document.getElementById('comments-list');c.innerHTML="";
-            if(d.coment){Object.values(d.coment).reverse().forEach(v=>{c.innerHTML+=`<div>⭐${v.n}: ${v.m}</div>`})}
-        }
-        async function sendEval(){
-            const n=document.querySelector('input[name="star"]:checked');
-            const m=document.getElementById('e-msg').value;
-            if(!n)return;
-            const r=await fetch(`${U}.json`);
-            const d=await r.json();
-            await fetch(`${U}/coment.json`,{method:'POST',body:JSON.stringify({n:parseInt(n.value),m})});
-            await fetch(`${U}.json`,{method:'PATCH',body:JSON.stringify({soma:(d.soma||0)+parseInt(n.value),total:(d.total||0)+1})});
-            nav('/Inicio');
-        }
-        async function upAdm(){
-            const v=document.getElementById('adm-p').value;
-            const r=await fetch(`${U}.json`);
-            const d=await r.json();
-            await fetch(`${U}.json`,{method:'PATCH',body:JSON.stringify({pedidos:(d.pedidos||0)+parseInt(v)})});
-            nav('/Inicio');
-        }
-    </script>
+<div id="Adm" class="page">
+<div class="card">
+<h2>Administração</h2>
+<input type="number" id="pedidosAdm" placeholder="Número de pedidos">
+<input type="text" id="textoAdm" placeholder="Texto satisfação">
+<button onclick="salvarAdm()">Salvar</button>
+</div>
+</div>
+
+<script>
+const firebaseConfig={
+databaseURL:"https://dados-e6625-default-rtdb.firebaseio.com/"
+}
+firebase.initializeApp(firebaseConfig)
+const db=firebase.database()
+
+function route(){
+let p=location.pathname
+if(p.endsWith("/Matrizes/")||p.endsWith("/Matrizes")) location.replace("/Matrizes/Inicio")
+document.querySelectorAll(".page").forEach(e=>e.classList.remove("active"))
+if(p.includes("Compra")) Compra.classList.add("active")
+else if(p.includes("Avaliar")) Avaliar.classList.add("active")
+else if(p.includes("Adm")) Adm.classList.add("active")
+else Inicio.classList.add("active")
+}
+route()
+window.onpopstate=route
+
+function enviarAvaliacao(){
+let n=parseFloat(nota.value)
+if(isNaN(n)||n<0||n>5)return
+let c=comentario.value||""
+let ref=db.ref("avaliacoes").push()
+ref.set({nota:n,comentario:c})
+location.href="/Matrizes/Inicio"
+}
+
+function salvarAdm(){
+db.ref("config").set({
+pedidos:parseInt(pedidosAdm.value)||0,
+texto:textoAdm.value||"Está satisfeito com nosso serviço?"
+})
+}
+
+db.ref("avaliacoes").on("value",s=>{
+let v=s.val()||{}
+let notas=Object.values(v).map(a=>a.nota)
+let total=notas.length
+let media=total? (notas.reduce((a,b)=>a+b,0)/total).toFixed(2):"0"
+media.innerText=media
+totalAval.innerText=total
+})
+
+db.ref("config").on("value",s=>{
+let v=s.val()||{}
+pedidos.innerText=v.pedidos||0
+satisfacaoTxt.innerText=v.texto||"Está satisfeito com nosso serviço?"
+})
+</script>
+
 </body>
 </html>
