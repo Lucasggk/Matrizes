@@ -1,117 +1,510 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LKZ Matrizes</title>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-<style>
-body{margin:0;font-family:Inter,Arial;background:#0f172a;color:#fff}
-nav{display:flex;gap:15px;padding:15px;background:#111827}
-nav a{color:#fff;text-decoration:none;font-weight:700}
-.page{display:none;padding:30px}
-.active{display:block}
-.card{background:#1e293b;padding:20px;border-radius:15px;margin-bottom:20px}
-input,textarea,button{width:100%;padding:10px;border-radius:10px;border:none;margin-top:10px}
-button{background:#6366f1;color:#fff;font-weight:800;cursor:pointer}
-.stat{font-size:22px;font-weight:900}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LKZ Matrizes - Profissional</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- ESTILOS GERAIS E RESET --- */
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:linear-gradient(135deg,#0f172a 0%,#1e293b 25%,#312e81 50%,#4f46e5 100%);min-height:100vh;font-family:'Inter',sans-serif;overflow-x:hidden;color:white}
+        .container{max-width:1200px;margin:0 auto;padding:20px}
+        
+        /* --- NAVEGAÇÃO / VIEWS --- */
+        .view-section { display: none; animation: fadeIn 0.5s ease; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- HEADER --- */
+        .header{text-align:center;margin-bottom:30px;padding-top:20px}
+        .logo{font-size:42px;font-weight:900;background:linear-gradient(135deg,#06b6d4,#7c3aed,#4f46e5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;font-family:'Poppins',sans-serif;margin-bottom:8px;cursor:pointer}
+        .tagline{color:rgba(255,255,255,0.9);font-size:15px;font-weight:600;letter-spacing:2px;font-family:'Poppins',sans-serif}
+
+        /* --- CARDS E ESTATÍSTICAS --- */
+        .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin-bottom:30px}
+        .stat-card{background:rgba(255,255,255,0.08);backdrop-filter:blur(20px);border-radius:16px;padding:20px;text-align:center;border:1px solid rgba(124,58,237,0.3);transition:all 0.3s}
+        .stat-card:hover{transform:translateY(-5px);border-color:#06b6d4}
+        .stat-icon{font-size:32px;margin-bottom:8px}
+        .stat-value{font-size:28px;font-weight:900;color:#06b6d4;font-family:'Poppins',sans-serif;margin-bottom:4px}
+        .stat-label{color:rgba(255,255,255,0.8);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px}
+
+        /* --- PREÇOS --- */
+        .pricing-info{background:rgba(255,255,255,0.08);backdrop-filter:blur(20px);border-radius:20px;padding:30px;margin-bottom:25px;border:1px solid rgba(124,58,237,0.3);text-align:center}
+        .pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-top:20px}
+        .price-item{background:rgba(124,58,237,0.2);border:2px solid rgba(124,58,237,0.4);border-radius:14px;padding:20px;transition:0.3s}
+        .price-amount{font-size:36px;font-weight:900;color:#06b6d4;font-family:'Poppins',sans-serif}
+
+        /* --- BOTÕES --- */
+        .cta-btn{display:block;width:100%;max-width:400px;margin:0 auto 25px;padding:16px 40px;background:linear-gradient(135deg,#7c3aed,#4f46e5,#06b6d4);color:white;font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:2px;border:none;border-radius:14px;cursor:pointer;transition:all 0.3s;font-family:'Poppins',sans-serif;box-shadow:0 10px 30px rgba(124,58,237,0.4)}
+        .cta-btn:hover{transform:translateY(-4px);box-shadow:0 15px 40px rgba(124,58,237,0.6)}
+        .secondary-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);margin-top:10px}
+
+        /* --- FORMULÁRIOS (Compra e Avaliação) --- */
+        .form-container{background:rgba(20,20,50,0.9);backdrop-filter:blur(25px);border-radius:25px;padding:35px;border:1px solid rgba(124,58,237,0.3);max-width:800px;margin:0 auto}
+        .form-title{font-size:30px;font-weight:900;text-align:center;color:#06b6d4;font-family:'Poppins',sans-serif;margin-bottom:20px}
+        .input-group{margin-bottom:15px}
+        label{display:block;margin-bottom:8px;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:1px}
+        input,textarea,select{width:100%;padding:12px;border:2px solid rgba(124,58,237,0.3);border-radius:12px;background:rgba(255,255,255,0.05);color:white;font-family:'Inter',sans-serif}
+        input:focus{border-color:#06b6d4;outline:none}
+
+        /* --- SISTEMA DE AVALIAÇÃO (Estrelas) --- */
+        .rating-box{display:flex;justify-content:center;gap:10px;margin:20px 0;flex-direction:row-reverse}
+        .rating-box input{display:none}
+        .rating-box label{font-size:40px;color:rgba(255,255,255,0.2);cursor:pointer;transition:0.2s}
+        .rating-box input:checked ~ label, .rating-box label:hover, .rating-box label:hover ~ label{color:#fbbf24;transform:scale(1.1)}
+
+        /* --- ADMIN PANEL --- */
+        .admin-login{max-width:400px;margin:50px auto;text-align:center}
+        .admin-panel{display:none} 
+        .admin-panel.active{display:block}
+
+        /* --- QTY CONTROL --- */
+        .qty-control{display:flex;align-items:center;justify-content:center;gap:15px}
+        .qty-btn{width:40px;height:40px;border-radius:10px;border:none;background:#7c3aed;color:white;font-weight:bold;cursor:pointer;font-size:18px}
+        .qty-display{font-size:24px;font-weight:bold;color:#06b6d4}
+
+        /* --- COMENTÁRIOS NA HOME --- */
+        .reviews-scroll { max-height: 200px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; margin-top: 20px; }
+        .review-item { margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .review-stars { color: #fbbf24; }
+        
+        /* Status msg */
+        .status{padding:15px;margin-top:10px;border-radius:8px;text-align:center;display:none}
+        .success{background:rgba(34,197,94,0.2);color:#86efac}
+        .error{background:rgba(239,68,68,0.2);color:#fca5a5}
+    </style>
 </head>
 <body>
 
-<nav>
-<a href="/Matrizes/Inicio">Inicio</a>
-<a href="/Matrizes/Compra">Compra</a>
-<a href="/Matrizes/Avaliar">Avaliar</a>
-<a href="/Matrizes/Adm">Adm</a>
-</nav>
+    <div class="container">
+        
+        <div id="view-inicio" class="view-section active">
+            <div class="header">
+                <h1 class="logo">LKZ MATRIZES</h1>
+                <p class="tagline">CRIAÇÃO DE MATRIZES PROFISSIONAIS</p>
+            </div>
 
-<div id="Inicio" class="page">
-<div class="card">
-<h1>LKZ MATRIZES</h1>
-<p id="satisfacaoTxt"></p>
-<p>Média de Avaliações: <span class="stat" id="media"></span></p>
-<p>Total de Avaliações: <span class="stat" id="totalAval"></span></p>
-<p>Total de Pedidos: <span class="stat" id="pedidos"></span></p>
-</div>
-</div>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-icon">💾</div>
+                    <div class="stat-value" id="stat-orders">...</div>
+                    <div class="stat-label">Pedidos Entregues</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-value" id="stat-rating">...</div>
+                    <div class="stat-label">Média de Avaliações</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💬</div>
+                    <div class="stat-value" id="stat-count">...</div>
+                    <div class="stat-label">Avaliações Totais</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-value">24h</div>
+                    <div class="stat-label">Entrega Rápida</div>
+                </div>
+            </div>
 
-<div id="Compra" class="page">
-<div class="card">
-<h2>Compra</h2>
-<p>Entre em contato para realizar seu pedido</p>
-</div>
-</div>
+            <div class="pricing-info">
+                <h2 style="margin-bottom: 15px; font-family:'Poppins', sans-serif">O que nossos clientes dizem</h2>
+                <div id="reviews-list" class="reviews-scroll">
+                    <p style="text-align:center; opacity:0.6">Carregando avaliações...</p>
+                </div>
+            </div>
 
-<div id="Avaliar" class="page">
-<div class="card">
-<h2>Avaliar Serviço</h2>
-<input type="number" id="nota" min="0" max="5" placeholder="Nota 0 a 5">
-<textarea id="comentario" placeholder="Comentário opcional"></textarea>
-<button onclick="enviarAvaliacao()">Enviar Avaliação</button>
-</div>
-</div>
+            <button class="cta-btn" onclick="navigateTo('/Compra')">✨ FAZER PEDIDO AGORA</button>
+            <button class="cta-btn secondary-btn" onclick="navigateTo('/Avaliar')">⭐ AVALIAR SERVIÇO</button>
+            <p style="text-align:center; margin-top:20px; font-size:12px; opacity:0.5; cursor:pointer" onclick="navigateTo('/Adm')">Área Administrativa</p>
+        </div>
 
-<div id="Adm" class="page">
-<div class="card">
-<h2>Administração</h2>
-<input type="number" id="pedidosAdm" placeholder="Número de pedidos">
-<input type="text" id="textoAdm" placeholder="Texto satisfação">
-<button onclick="salvarAdm()">Salvar</button>
-</div>
-</div>
 
-<script>
-const firebaseConfig={
-databaseURL:"https://dados-e6625-default-rtdb.firebaseio.com/"
-}
-firebase.initializeApp(firebaseConfig)
-const db=firebase.database()
+        <div id="view-compra" class="view-section">
+            <div class="form-container">
+                <h2 class="form-title">NOVO PEDIDO</h2>
+                
+                <form id="orderForm">
+                    <div class="input-group">
+                        <label>Seu Nome</label>
+                        <input type="text" id="order-name" required placeholder="Nome completo">
+                    </div>
+                    <div class="input-group">
+                        <label>Contato (WhatsApp/Telegram)</label>
+                        <input type="text" id="order-contact" required placeholder="(XX) 99999-9999">
+                    </div>
 
-function route(){
-let p=location.pathname
-if(p.endsWith("/Matrizes/")||p.endsWith("/Matrizes")) location.replace("/Matrizes/Inicio")
-document.querySelectorAll(".page").forEach(e=>e.classList.remove("active"))
-if(p.includes("Compra")) Compra.classList.add("active")
-else if(p.includes("Avaliar")) Avaliar.classList.add("active")
-else if(p.includes("Adm")) Adm.classList.add("active")
-else Inicio.classList.add("active")
-}
-route()
-window.onpopstate=route
+                    <div class="input-group" style="text-align:center; margin: 25px 0;">
+                        <label>Quantidade de Matrizes</label>
+                        <div class="qty-control">
+                            <button type="button" class="qty-btn" onclick="changeQty(-1)">-</button>
+                            <div class="qty-display" id="qty-display">1</div>
+                            <button type="button" class="qty-btn" onclick="changeQty(1)">+</button>
+                        </div>
+                    </div>
 
-function enviarAvaliacao(){
-let n=parseFloat(nota.value)
-if(isNaN(n)||n<0||n>5)return
-let c=comentario.value||""
-let ref=db.ref("avaliacoes").push()
-ref.set({nota:n,comentario:c})
-location.href="/Matrizes/Inicio"
-}
+                    <div id="matrices-details-container">
+                        </div>
 
-function salvarAdm(){
-db.ref("config").set({
-pedidos:parseInt(pedidosAdm.value)||0,
-texto:textoAdm.value||"Está satisfeito com nosso serviço?"
-})
-}
+                    <div class="input-group">
+                        <label>Observações Gerais</label>
+                        <textarea id="order-obs" rows="2"></textarea>
+                    </div>
 
-db.ref("avaliacoes").on("value",s=>{
-let v=s.val()||{}
-let notas=Object.values(v).map(a=>a.nota)
-let total=notas.length
-let media=total? (notas.reduce((a,b)=>a+b,0)/total).toFixed(2):"0"
-media.innerText=media
-totalAval.innerText=total
-})
+                    <div style="background:rgba(6,182,212,0.1); padding:15px; border-radius:10px; margin-bottom:20px; text-align:center; border:1px solid #06b6d4">
+                        <span style="display:block; font-size:12px; text-transform:uppercase">Valor Total</span>
+                        <span style="font-size:32px; font-weight:900; color:#06b6d4" id="total-price">R$ 5,00</span>
+                    </div>
 
-db.ref("config").on("value",s=>{
-let v=s.val()||{}
-pedidos.innerText=v.pedidos||0
-satisfacaoTxt.innerText=v.texto||"Está satisfeito com nosso serviço?"
-})
-</script>
+                    <button type="submit" class="cta-btn">ENVIAR PEDIDO</button>
+                    <button type="button" class="cta-btn secondary-btn" onclick="navigateTo('/Inicio')">VOLTAR</button>
+                    <div id="order-status" class="status"></div>
+                </form>
+            </div>
+        </div>
 
+
+        <div id="view-avaliar" class="view-section">
+            <div class="form-container">
+                <h2 class="form-title">AVALIE NOSSO SERVIÇO</h2>
+                <p style="text-align:center; margin-bottom:20px; opacity:0.8">Sua opinião é muito importante para nós!</p>
+
+                <form id="reviewForm">
+                    <div class="input-group">
+                        <label>Seu Nome</label>
+                        <input type="text" id="review-name" required>
+                    </div>
+
+                    <label style="text-align:center">Quantas estrelas merecemos?</label>
+                    <div class="rating-box">
+                        <input type="radio" name="rating" id="star5" value="5" required><label for="star5">★</label>
+                        <input type="radio" name="rating" id="star4" value="4"><label for="star4">★</label>
+                        <input type="radio" name="rating" id="star3" value="3"><label for="star3">★</label>
+                        <input type="radio" name="rating" id="star2" value="2"><label for="star2">★</label>
+                        <input type="radio" name="rating" id="star1" value="1"><label for="star1">★</label>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Comentário (Opcional)</label>
+                        <textarea id="review-comment" rows="3" placeholder="Conte como foi sua experiência..."></textarea>
+                    </div>
+
+                    <button type="submit" class="cta-btn">ENVIAR AVALIAÇÃO</button>
+                    <button type="button" class="cta-btn secondary-btn" onclick="navigateTo('/Inicio')">CANCELAR</button>
+                    <div id="review-status" class="status"></div>
+                </form>
+            </div>
+        </div>
+
+
+        <div id="view-adm" class="view-section">
+            <div class="form-container">
+                <h2 class="form-title">PAINEL ADM</h2>
+                
+                <div id="adm-login" class="admin-login">
+                    <input type="password" id="adm-pass" placeholder="Senha Administrativa" style="text-align:center; margin-bottom:10px">
+                    <button class="cta-btn" onclick="checkAdm()">ENTRAR</button>
+                    <button class="cta-btn secondary-btn" onclick="navigateTo('/Inicio')">SAIR</button>
+                </div>
+
+                <div id="adm-content" class="admin-panel">
+                    <div class="input-group">
+                        <label>Total de Pedidos Realizados (Manual)</label>
+                        <input type="number" id="adm-orders-count">
+                    </div>
+                    <button class="cta-btn" onclick="updateStats()">ATUALIZAR DADOS</button>
+                    <div id="adm-status" class="status"></div>
+                    <br>
+                    <button class="cta-btn secondary-btn" onclick="navigateTo('/Inicio')">VOLTAR AO INÍCIO</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- CONFIGURAÇÕES ---
+        const FIREBASE_URL = "https://dados-e6625-default-rtdb.firebaseio.com/";
+        const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1450202907436646574/ILD19nLYRV4jNEqKpOjOkDDvnVuvt6k3LMESQwMgtDvhQd7rdHguntljgmxeWlfxd6yv";
+        
+        // --- SISTEMA DE ROTAS ---
+        // Muda a URL visualmente e exibe a section correta
+        function navigateTo(route) {
+            // Remove a barra inicial se houver para normalizar
+            const cleanRoute = route.startsWith('/') ? route : '/' + route;
+            
+            // Atualiza o hash da URL (ex: #/Compra)
+            window.location.hash = cleanRoute;
+            
+            // Esconde todas as views
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            
+            // Mostra a view correta baseada no ID
+            const viewId = 'view-' + cleanRoute.replace('/', '').toLowerCase();
+            const target = document.getElementById(viewId);
+            
+            if (target) {
+                target.classList.add('active');
+                window.scrollTo(0,0);
+            } else {
+                // Se rota não existir, vai para Inicio
+                navigateTo('/Inicio');
+            }
+        }
+
+        // Escuta mudanças na URL (botão voltar do navegador)
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash.replace('#', '');
+            navigateTo(hash || '/Inicio');
+        });
+
+        // Inicialização
+        window.addEventListener('DOMContentLoaded', () => {
+            const hash = window.location.hash.replace('#', '');
+            navigateTo(hash || '/Inicio');
+            loadFirebaseData(); // Carrega dados ao abrir
+            updateMatrixForms(); // Inicia formulário de compra
+        });
+
+
+        // --- FIREBASE: LEITURA E ESCRITA ---
+
+        async function loadFirebaseData() {
+            try {
+                // 1. Busca estatísticas gerais
+                let resStats = await fetch(`${FIREBASE_URL}stats.json`);
+                let stats = await resStats.json();
+                
+                // Se vazio, cria estrutura padrão
+                if (!stats) {
+                    stats = { orders: 0 };
+                    await fetch(`${FIREBASE_URL}stats.json`, { method: 'PUT', body: JSON.stringify(stats) });
+                }
+
+                // 2. Busca avaliações
+                let resReviews = await fetch(`${FIREBASE_URL}avaliacoes.json`);
+                let reviews = await resReviews.json();
+
+                // 3. Cálculos
+                let totalRating = 0;
+                let count = 0;
+                let commentsHtml = '';
+
+                if (reviews) {
+                    const reviewList = Object.values(reviews);
+                    count = reviewList.length;
+                    
+                    // Ordena reviews do mais novo pro antigo (assumindo ordem de inserção)
+                    reviewList.reverse().forEach(r => {
+                        totalRating += parseInt(r.rating);
+                        if(r.comment) {
+                            const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+                            commentsHtml += `
+                                <div class="review-item">
+                                    <div style="font-weight:bold; font-size:13px">${r.name} <span class="review-stars">${stars}</span></div>
+                                    <div style="font-size:12px; opacity:0.8">"${r.comment}"</div>
+                                </div>
+                            `;
+                        }
+                    });
+                }
+
+                const average = count > 0 ? (totalRating / count).toFixed(1) : "5.0";
+
+                // 4. Atualiza a UI da Home
+                document.getElementById('stat-orders').innerText = stats.orders + "+";
+                document.getElementById('stat-rating').innerText = average;
+                document.getElementById('stat-count').innerText = count;
+                
+                const reviewsContainer = document.getElementById('reviews-list');
+                reviewsContainer.innerHTML = commentsHtml || '<p style="text-align:center; font-size:12px">Seja o primeiro a avaliar!</p>';
+
+            } catch (err) {
+                console.error("Erro Firebase:", err);
+            }
+        }
+
+        // --- LÓGICA DE AVALIAÇÃO ---
+        document.getElementById('reviewForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.innerHTML = "ENVIANDO...";
+            btn.disabled = true;
+
+            const data = {
+                name: document.getElementById('review-name').value,
+                rating: document.querySelector('input[name="rating"]:checked').value,
+                comment: document.getElementById('review-comment').value,
+                date: new Date().toISOString()
+            };
+
+            try {
+                await fetch(`${FIREBASE_URL}avaliacoes.json`, {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+                
+                document.getElementById('review-status').innerHTML = "✅ Avaliação enviada! Redirecionando...";
+                document.getElementById('review-status').className = "status success active";
+                document.getElementById('review-status').style.display = 'block';
+
+                setTimeout(() => {
+                    document.getElementById('reviewForm').reset();
+                    document.getElementById('review-status').style.display = 'none';
+                    btn.innerHTML = "ENVIAR AVALIAÇÃO";
+                    btn.disabled = false;
+                    loadFirebaseData(); // Atualiza média
+                    navigateTo('/Inicio');
+                }, 2000);
+
+            } catch (error) {
+                alert("Erro ao enviar avaliação.");
+                btn.disabled = false;
+            }
+        });
+
+
+        // --- LÓGICA DO PEDIDO (COMPRA) ---
+        let qty = 1;
+
+        function changeQty(delta) {
+            qty += delta;
+            if(qty < 1) qty = 1;
+            document.getElementById('qty-display').innerText = qty;
+            updateMatrixForms();
+        }
+
+        function updateMatrixForms() {
+            const container = document.getElementById('matrices-details-container');
+            container.innerHTML = '';
+            
+            for(let i=0; i<qty; i++) {
+                container.innerHTML += `
+                    <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:10px; margin-bottom:10px; border:1px solid rgba(124,58,237,0.2)">
+                        <p style="font-size:12px; font-weight:bold; margin-bottom:10px; color:#7c3aed">MATRIZ #${i+1}</p>
+                        <div style="display:grid; gap:10px;">
+                            <input type="text" class="matriz-nome" placeholder="Texto/Nome a bordar" required>
+                            <input type="text" class="matriz-fonte" placeholder="Nome da Fonte (Ex: Arial)" required>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px">
+                                <input type="number" class="matriz-altura" placeholder="Altura (mm)" required>
+                                <input type="number" class="matriz-largura" placeholder="Largura (mm)" required>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Atualiza Preço
+            let price = 5; // Padrão
+            if(qty >= 3 && qty <= 4) price = 4;
+            if(qty >= 5) price = 3;
+            
+            const total = qty * price;
+            document.getElementById('total-price').innerText = `R$ ${total},00`;
+        }
+
+        document.getElementById('orderForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const statusDiv = document.getElementById('order-status');
+            
+            btn.innerHTML = "PROCESSANDO...";
+            btn.disabled = true;
+
+            // Coleta dados
+            const client = document.getElementById('order-name').value;
+            const contact = document.getElementById('order-contact').value;
+            const obs = document.getElementById('order-obs').value;
+            const priceText = document.getElementById('total-price').innerText;
+
+            // Coleta Matrizes
+            let details = "";
+            const names = document.querySelectorAll('.matriz-nome');
+            const fonts = document.querySelectorAll('.matriz-fonte');
+            const heights = document.querySelectorAll('.matriz-altura');
+            const widths = document.querySelectorAll('.matriz-largura');
+
+            names.forEach((input, i) => {
+                details += `**Matriz ${i+1}:** ${input.value} | Fonte: ${fonts[i].value} | ${heights[i].value}x${widths[i].value}mm\n`;
+            });
+
+            // Payload Discord
+            const payload = {
+                username: "LKZ Pedidos",
+                embeds: [{
+                    title: "🛒 NOVO PEDIDO RECEBIDO",
+                    color: 3066993,
+                    fields: [
+                        { name: "Cliente", value: client, inline: true },
+                        { name: "Contato", value: contact, inline: true },
+                        { name: "Total", value: priceText, inline: true },
+                        { name: "Detalhes do Pedido", value: details },
+                        { name: "Observações", value: obs || "Nenhuma" }
+                    ]
+                }]
+            };
+
+            try {
+                await fetch(DISCORD_WEBHOOK, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                statusDiv.style.display = 'block';
+                statusDiv.className = 'status success';
+                statusDiv.innerHTML = "✅ Pedido enviado! Entraremos em contato pelo número informado.";
+                e.target.reset();
+                qty = 1;
+                changeQty(0);
+            } catch (err) {
+                statusDiv.style.display = 'block';
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = "❌ Erro ao enviar. Tente novamente.";
+            } finally {
+                btn.innerHTML = "ENVIAR PEDIDO";
+                btn.disabled = false;
+            }
+        });
+
+
+        // --- ÁREA ADMIN ---
+        function checkAdm() {
+            const pass = document.getElementById('adm-pass').value;
+            if(pass === "admin123") { // Senha simples (client-side)
+                document.getElementById('adm-login').style.display = 'none';
+                document.getElementById('adm-content').classList.add('active');
+                loadAdmStats();
+            } else {
+                alert("Senha incorreta!");
+            }
+        }
+
+        async function loadAdmStats() {
+            let res = await fetch(`${FIREBASE_URL}stats.json`);
+            let data = await res.json();
+            if(data) {
+                document.getElementById('adm-orders-count').value = data.orders || 0;
+            }
+        }
+
+        async function updateStats() {
+            const newOrders = parseInt(document.getElementById('adm-orders-count').value);
+            try {
+                await fetch(`${FIREBASE_URL}stats.json`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ orders: newOrders })
+                });
+                document.getElementById('adm-status').style.display = 'block';
+                document.getElementById('adm-status').className = 'status success';
+                document.getElementById('adm-status').innerText = "Dados atualizados!";
+                loadFirebaseData(); // Atualiza a home também
+            } catch(e) {
+                alert("Erro ao atualizar");
+            }
+        }
+
+    </script>
 </body>
 </html>
