@@ -3,103 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LKZ Matrizes - Profissional</title>
+    <title>LKZ Matrizes - Criação de Matrizes Profissionais</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js"></script>
     <style>
-        /* --- ESTILOS GERAIS E RESET --- */
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{background:linear-gradient(135deg,#0f172a 0%,#1e293b 25%,#312e81 50%,#4f46e5 100%);min-height:100vh;font-family:'Inter',sans-serif;overflow-x:hidden;color:white}
-        .container{max-width:1200px;margin:0 auto;padding:20px}
-        
-        /* --- NAVEGAÇÃO / VIEWS --- */
-        .view-section { display: none; animation: fadeIn 0.5s ease; }
-        .view-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- HEADER --- */
-        .header{text-align:center;margin-bottom:30px;padding-top:20px}
-        .logo{font-size:42px;font-weight:900;background:linear-gradient(135deg,#06b6d4,#7c3aed,#4f46e5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;font-family:'Poppins',sans-serif;margin-bottom:8px;cursor:pointer}
-        .tagline{color:rgba(255,255,255,0.9);font-size:15px;font-weight:600;letter-spacing:2px;font-family:'Poppins',sans-serif}
-
-        /* --- CARDS E ESTATÍSTICAS --- */
-        .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin-bottom:30px}
-        .stat-card{background:rgba(255,255,255,0.08);backdrop-filter:blur(20px);border-radius:16px;padding:20px;text-align:center;border:1px solid rgba(124,58,237,0.3);transition:all 0.3s}
-        .stat-card:hover{transform:translateY(-5px);border-color:#06b6d4}
-        .stat-icon{font-size:32px;margin-bottom:8px}
-        .stat-value{font-size:28px;font-weight:900;color:#06b6d4;font-family:'Poppins',sans-serif;margin-bottom:4px}
-        .stat-label{color:rgba(255,255,255,0.8);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px}
-
-        /* --- PREÇOS --- */
-        .pricing-info{background:rgba(255,255,255,0.08);backdrop-filter:blur(20px);border-radius:20px;padding:30px;margin-bottom:25px;border:1px solid rgba(124,58,237,0.3);text-align:center}
-        .pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-top:20px}
-        .price-item{background:rgba(124,58,237,0.2);border:2px solid rgba(124,58,237,0.4);border-radius:14px;padding:20px;transition:0.3s}
-        .price-amount{font-size:36px;font-weight:900;color:#06b6d4;font-family:'Poppins',sans-serif}
-
-        /* --- BOTÕES --- */
-        .cta-btn{display:block;width:100%;max-width:400px;margin:0 auto 25px;padding:16px 40px;background:linear-gradient(135deg,#7c3aed,#4f46e5,#06b6d4);color:white;font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:2px;border:none;border-radius:14px;cursor:pointer;transition:all 0.3s;font-family:'Poppins',sans-serif;box-shadow:0 10px 30px rgba(124,58,237,0.4)}
-        .cta-btn:hover{transform:translateY(-4px);box-shadow:0 15px 40px rgba(124,58,237,0.6)}
-        .secondary-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);margin-top:10px}
-
-        /* --- FORMULÁRIOS (Compra e Avaliação) --- */
-        .form-container{background:rgba(20,20,50,0.9);backdrop-filter:blur(25px);border-radius:25px;padding:35px;border:1px solid rgba(124,58,237,0.3);max-width:800px;margin:0 auto}
-        .form-title{font-size:30px;font-weight:900;text-align:center;color:#06b6d4;font-family:'Poppins',sans-serif;margin-bottom:20px}
-        .input-group{margin-bottom:15px}
-        label{display:block;margin-bottom:8px;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:1px}
-        input,textarea,select{width:100%;padding:12px;border:2px solid rgba(124,58,237,0.3);border-radius:12px;background:rgba(255,255,255,0.05);color:white;font-family:'Inter',sans-serif}
-        input:focus{border-color:#06b6d4;outline:none}
-
-        /* --- SISTEMA DE AVALIAÇÃO (Estrelas) --- */
-        .rating-box{display:flex;justify-content:center;gap:10px;margin:20px 0;flex-direction:row-reverse}
-        .rating-box input{display:none}
-        .rating-box label{font-size:40px;color:rgba(255,255,255,0.2);cursor:pointer;transition:0.2s}
-        .rating-box input:checked ~ label, .rating-box label:hover, .rating-box label:hover ~ label{color:#fbbf24;transform:scale(1.1)}
-
-        /* --- ADMIN PANEL --- */
-        .admin-login{max-width:400px;margin:50px auto;text-align:center}
-        .admin-panel{display:none} 
-        .admin-panel.active{display:block}
-
-        /* --- QTY CONTROL --- */
-        .qty-control{display:flex;align-items:center;justify-content:center;gap:15px}
-        .qty-btn{width:40px;height:40px;border-radius:10px;border:none;background:#7c3aed;color:white;font-weight:bold;cursor:pointer;font-size:18px}
-        .qty-display{font-size:24px;font-weight:bold;color:#06b6d4}
-
-        /* --- COMENTÁRIOS NA HOME --- */
-        .reviews-scroll { max-height: 200px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; margin-top: 20px; }
-        .review-item { margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
-        .review-stars { color: #fbbf24; }
-        
-        /* Status msg */
-        .status{padding:15px;margin-top:10px;border-radius:8px;text-align:center;display:none}
-        .success{background:rgba(34,197,94,0.2);color:#86efac}
-        .error{background:rgba(239,68,68,0.2);color:#fca5a5}
+        *{margin:0;padding:0;box-sizing:border-box}body{background:linear-gradient(135deg,#0f172a 0%,#1e293b 25%,#312e81 50%,#4f46e5 100%);min-height:100vh;font-family:'Inter',sans-serif;overflow-x:hidden}.container{max-width:1200px;margin:0 auto;padding:20px}.header{text-align:center;margin-bottom:30px}.logo{font-size:42px;font-weight:900;background:linear-gradient(135deg,#06b6d4,#7c3aed,#4f46e5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;font-family:'Poppins',sans-serif;margin-bottom:8px}.tagline{color:rgba(255,255,255,0.9);font-size:15px;font-weight:600;letter-spacing:2px;font-family:'Poppins',sans-serif;margin-bottom:5px}.description{color:rgba(255,255,255,0.75);font-size:13px;font-weight:400}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin-bottom:30px}.stat-card{background:rgba(255,255,255,0.08);backdrop-filter:blur(20px);border-radius:16px;padding:20px;text-align:center;border:1px solid rgba(124,58,237,0.3);transition:all 0.3s}.stat-card:hover{transform:translateY(-5px);background:rgba(255,255,255,0.12);border-color:rgba(124,58,237,0.5)}.stat-icon{font-size:32px;margin-bottom:8px}.stat-value{font-size:28px;font-weight:900;background:linear-gradient(135deg,#06b6d4,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'Poppins',sans-serif;margin-bottom:4px}.stat-label{color:rgba(255,255,255,0.8);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px}.pricing-info{background:rgba(255,255,255,0.08);backdrop-filter:blur(20px);border-radius:20px;padding:30px;margin-bottom:25px;border:1px solid rgba(124,58,237,0.3);text-align:center}.pricing-title{color:rgba(255,255,255,0.95);font-size:24px;font-weight:900;margin-bottom:20px;font-family:'Poppins',sans-serif}.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:20px}.price-item{background:rgba(124,58,237,0.2);border:2px solid rgba(124,58,237,0.4);border-radius:14px;padding:20px;transition:all 0.3s}.price-item:hover{transform:scale(1.05);border-color:rgba(124,58,237,0.6);background:rgba(124,58,237,0.3)}.price-qty{color:rgba(255,255,255,0.9);font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}.price-amount{font-size:36px;font-weight:900;background:linear-gradient(135deg,#06b6d4,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'Poppins',sans-serif}.price-detail{color:rgba(255,255,255,0.75);font-size:12px;margin-top:8px;font-weight:600}.price-note{color:rgba(255,255,255,0.7);font-size:13px;margin-top:15px;padding:15px;background:rgba(6,182,212,0.1);border-radius:10px;border:1px solid rgba(6,182,212,0.3)}.cta-btn{display:block;width:100%;max-width:400px;margin:0 auto 25px;padding:16px 40px;background:linear-gradient(135deg,#7c3aed,#4f46e5,#06b6d4);color:white;font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:2px;border:none;border-radius:14px;cursor:pointer;transition:all 0.3s;font-family:'Poppins',sans-serif;box-shadow:0 10px 30px rgba(124,58,237,0.4)}.cta-btn:hover{transform:translateY(-4px);box-shadow:0 15px 40px rgba(124,58,237,0.6)}.link-btn{color:#06b6d4;text-decoration:none;cursor:pointer;font-weight:600;transition:color 0.3s;border:none;background:none}.link-btn:hover{color:#7c3aed}.form-container{display:none;background:rgba(20,20,50,0.9);backdrop-filter:blur(25px);border-radius:25px;padding:35px;border:1px solid rgba(124,58,237,0.3)}.form-container.active{display:block}.form-header{text-align:center;margin-bottom:30px}.form-title{font-size:30px;font-weight:900;background:linear-gradient(135deg,#06b6d4,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'Poppins',sans-serif;margin-bottom:8px}.form-subtitle{color:rgba(255,255,255,0.8);font-size:13px}label{display:block;margin-bottom:8px;color:rgba(255,255,255,0.95);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:1px}.form-group{margin-bottom:20px}input,select,textarea{width:100%;padding:12px 16px;border:2px solid rgba(124,58,237,0.3);border-radius:12px;font-size:14px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.95);font-family:'Inter',sans-serif;transition:all 0.3s}input:focus,select:focus,textarea:focus{border-color:#7c3aed;outline:none;box-shadow:0 0 0 4px rgba(124,58,237,0.2);background:rgba(255,255,255,0.08)}input::placeholder,textarea::placeholder{color:rgba(255,255,255,0.5)}select{cursor:pointer}select option{background:#0f172a;color:white}.qty-control{display:flex;align-items:center;gap:15px;justify-content:center;margin-top:10px}.qty-btn{width:40px;height:40px;border:2px solid rgba(124,58,237,0.5);background:rgba(124,58,237,0.2);color:white;font-size:20px;font-weight:900;border-radius:10px;cursor:pointer;transition:all 0.3s;text-align:center}.qty-btn:hover{background:rgba(124,58,237,0.4);transform:scale(1.1)}.qty-display{font-size:28px;font-weight:900;color:rgba(6,182,212,1);min-width:50px;text-align:center;font-family:'Poppins',sans-serif}.names-section{margin-top:25px}.name-block{background:rgba(124,58,237,0.15);border:2px solid rgba(124,58,237,0.3);border-radius:16px;padding:20px;margin-bottom:15px;transition:all 0.3s}.name-block:hover{border-color:rgba(124,58,237,0.5);background:rgba(124,58,237,0.2)}.name-block-header{color:rgba(255,255,255,0.9);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;display:flex;align-items:center;gap:8px}.name-input{margin-bottom:15px}.customization-grid{display:grid;grid-template-columns:1fr;gap:12px}.fonte-group{margin-bottom:12px}.custom-group{display:flex;flex-direction:column;gap:6px}.custom-label{color:rgba(255,255,255,0.85);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}.size-inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px}.size-input-wrapper{display:flex;flex-direction:column;gap:6px}.size-input{padding:10px 12px;font-size:13px;border-radius:10px;text-align:center}.mm-label{font-size:10px;color:rgba(255,255,255,0.6);text-align:center;margin-top:2px;font-weight:500}.price-display{background:linear-gradient(135deg,rgba(124,58,237,0.3),rgba(6,182,212,0.2));border:2px solid rgba(124,58,237,0.4);border-radius:18px;padding:25px;text-align:center;margin-bottom:20px}.price-label{color:rgba(255,255,255,0.7);font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:10px}.price-value-block{background:rgba(255,255,255,0.05);border:2px solid rgba(6,182,212,0.4);border-radius:14px;padding:16px 30px;display:flex;align-items:center;justify-content:center;gap:8px}.price-currency{color:rgba(6,182,212,1);font-size:24px;font-weight:700}.price-value{color:rgba(6,182,212,1);font-size:40px;font-weight:900;font-family:'Poppins',sans-serif}.button-group{display:flex;gap:12px;margin-top:25px}.submit-btn,.back-btn{flex:1;padding:14px;border:none;border-radius:12px;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;transition:all 0.3s;font-family:'Poppins',sans-serif}.submit-btn{background:linear-gradient(135deg,#7c3aed,#4f46e5);color:white;border:2px solid rgba(124,58,237,0.5)}.submit-btn:hover{transform:translateY(-3px);box-shadow:0 12px 35px rgba(124,58,237,0.5)}.back-btn{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.9);border:2px solid rgba(255,255,255,0.2)}.back-btn:hover{transform:translateY(-3px);background:rgba(255,255,255,0.12)}.status{margin-top:15px;padding:14px;border-radius:10px;text-align:center;font-weight:700;display:none;letter-spacing:0.5px}.success{background:rgba(34,197,94,0.2);color:#86efac;border:2px solid rgba(34,197,94,0.4);display:block;font-size:14px;line-height:1.5}.success a{color:#06b6d4;font-weight:900;text-decoration:none;transition:color 0.3s}.success a:hover{color:#7c3aed}.error{background:rgba(239,68,68,0.2);color:#fca5a5;border:2px solid rgba(239,68,68,0.4)}.rating-section{margin:20px 0;text-align:center}.rating-group{display:flex;gap:10px;justify-content:center;margin:15px 0}.rating-btn{width:50px;height:50px;border:2px solid rgba(124,58,237,0.4);background:rgba(124,58,237,0.2);color:white;font-size:24px;border-radius:10px;cursor:pointer;transition:all 0.3s;font-weight:700}.rating-btn:hover,.rating-btn.selected{background:rgba(124,58,237,0.5);border-color:#7c3aed;transform:scale(1.1)}.satisfaction-text{color:rgba(255,255,255,0.9);font-size:14px;margin-bottom:10px;font-weight:600}.comment-box{margin-top:15px;text-align:left}.admin-panel{display:none;padding:30px}.admin-section{background:rgba(255,255,255,0.08);border-radius:16px;padding:20px;margin-bottom:20px;border:1px solid rgba(124,58,237,0.3)}.admin-title{color:rgba(255,255,255,0.95);font-size:18px;font-weight:900;margin-bottom:15px;font-family:'Poppins',sans-serif}.admin-input{width:100%;padding:12px 16px;border:2px solid rgba(124,58,237,0.3);border-radius:12px;font-size:14px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.95);margin-bottom:10px}.admin-btn{padding:12px 24px;background:linear-gradient(135deg,#7c3aed,#4f46e5);color:white;border:none;border-radius:12px;font-weight:700;cursor:pointer;transition:all 0.3s;font-family:'Poppins',sans-serif}.admin-btn:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(124,58,237,0.4)}.stats-table{width:100%;color:rgba(255,255,255,0.9);border-collapse:collapse;margin-top:15px}.stats-table th,.stats-table td{padding:12px;text-align:left;border-bottom:1px solid rgba(124,58,237,0.3);font-size:13px}.stats-table th{background:rgba(124,58,237,0.2);font-weight:700;text-transform:uppercase}.logout-btn{background:rgba(239,68,68,0.3);border:2px solid rgba(239,68,68,0.5);color:#fca5a5}.logout-btn:hover{background:rgba(239,68,68,0.4)}.adm-link{color:#7c3aed;cursor:pointer;text-decoration:none;font-size:11px;float:right;transition:color 0.3s}.adm-link:hover{color:#06b6d4}.password-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:1000;justify-content:center;align-items:center}.modal-content{background:rgba(20,20,50,0.95);border-radius:20px;padding:40px;border:2px solid rgba(124,58,237,0.5);max-width:400px;width:90%}.modal-title{font-size:24px;font-weight:900;color:rgba(255,255,255,0.95);margin-bottom:20px;text-align:center;font-family:'Poppins',sans-serif}.modal-input{width:100%;padding:12px 16px;border:2px solid rgba(124,58,237,0.3);border-radius:12px;font-size:14px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.95);margin-bottom:15px}.modal-btn{width:100%;padding:12px;background:linear-gradient(135deg,#7c3aed,#4f46e5);color:white;border:none;border-radius:12px;font-weight:700;cursor:pointer;transition:all 0.3s;font-family:'Poppins',sans-serif;margin-bottom:10px}.modal-btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(124,58,237,0.4)}.modal-cancel{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.8);border:2px solid rgba(255,255,255,0.2)}.modal-error{color:#fca5a5;text-align:center;font-size:12px;margin-top:10px}@media (max-width:768px){.logo{font-size:32px}.pricing-grid{grid-template-columns:1fr}.button-group{flex-direction:column}.stats{grid-template-columns:1fr}.size-inputs{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
-
     <div class="container">
+        <a class="adm-link" onclick="openAdminModal()">ADM</a>
         
-        <div id="view-inicio" class="view-section active">
+        <div id="dashboard">
             <div class="header">
                 <h1 class="logo">LKZ MATRIZES</h1>
                 <p class="tagline">CRIAÇÃO DE MATRIZES PROFISSIONAIS</p>
+                <p class="description">Matrizes prontas para sua máquina de bordar</p>
             </div>
 
             <div class="stats">
                 <div class="stat-card">
                     <div class="stat-icon">💾</div>
-                    <div class="stat-value" id="stat-orders">...</div>
-                    <div class="stat-label">Pedidos Entregues</div>
+                    <div class="stat-value" id="totalMatrizes">0</div>
+                    <div class="stat-label">Matrizes Criadas</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">⭐</div>
-                    <div class="stat-value" id="stat-rating">...</div>
-                    <div class="stat-label">Média de Avaliações</div>
+                    <div class="stat-value" id="averageRating">0</div>
+                    <div class="stat-label">Satisfação (5.0)</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon">💬</div>
-                    <div class="stat-value" id="stat-count">...</div>
-                    <div class="stat-label">Avaliações Totais</div>
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value" id="totalClients">0</div>
+                    <div class="stat-label">Clientes Felizes</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">⚡</div>
@@ -109,402 +46,672 @@
             </div>
 
             <div class="pricing-info">
-                <h2 style="margin-bottom: 15px; font-family:'Poppins', sans-serif">O que nossos clientes dizem</h2>
-                <div id="reviews-list" class="reviews-scroll">
-                    <p style="text-align:center; opacity:0.6">Carregando avaliações...</p>
+                <h2 class="pricing-title">💎 TABELA DE PREÇOS</h2>
+                <div class="pricing-grid">
+                    <div class="price-item">
+                        <div class="price-qty">1-2 Matrizes</div>
+                        <div class="price-amount">R$ 5</div>
+                        <div class="price-detail">R$ 5,00 cada matriz</div>
+                    </div>
+                    <div class="price-item">
+                        <div class="price-qty">3-4 Matrizes</div>
+                        <div class="price-amount">R$ 4</div>
+                        <div class="price-detail">R$ 4,00 cada matriz</div>
+                    </div>
+                    <div class="price-item">
+                        <div class="price-qty">5+ Matrizes</div>
+                        <div class="price-amount">R$ 3</div>
+                        <div class="price-detail">R$ 3,00 cada matriz</div>
+                    </div>
+                </div>
+                <div class="price-note">
+                    ✨ Acima de 5 Matrizes voce paga apenas R$ 3,00 cada matriz!
                 </div>
             </div>
 
-            <button class="cta-btn" onclick="navigateTo('/Compra')">✨ FAZER PEDIDO AGORA</button>
-            <button class="cta-btn secondary-btn" onclick="navigateTo('/Avaliar')">⭐ AVALIAR SERVIÇO</button>
-            <p style="text-align:center; margin-top:20px; font-size:12px; opacity:0.5; cursor:pointer" onclick="navigateTo('/Adm')">Área Administrativa</p>
+            <button class="cta-btn" id="fazerPedidoBtn">✨ SOLICITAR MATRIZES AGORA</button>
         </div>
 
-
-        <div id="view-compra" class="view-section">
-            <div class="form-container">
-                <h2 class="form-title">NOVO PEDIDO</h2>
-                
-                <form id="orderForm">
-                    <div class="input-group">
-                        <label>Seu Nome</label>
-                        <input type="text" id="order-name" required placeholder="Nome completo">
-                    </div>
-                    <div class="input-group">
-                        <label>Contato (WhatsApp/Telegram)</label>
-                        <input type="text" id="order-contact" required placeholder="(XX) 99999-9999">
-                    </div>
-
-                    <div class="input-group" style="text-align:center; margin: 25px 0;">
-                        <label>Quantidade de Matrizes</label>
-                        <div class="qty-control">
-                            <button type="button" class="qty-btn" onclick="changeQty(-1)">-</button>
-                            <div class="qty-display" id="qty-display">1</div>
-                            <button type="button" class="qty-btn" onclick="changeQty(1)">+</button>
-                        </div>
-                    </div>
-
-                    <div id="matrices-details-container">
-                        </div>
-
-                    <div class="input-group">
-                        <label>Observações Gerais</label>
-                        <textarea id="order-obs" rows="2"></textarea>
-                    </div>
-
-                    <div style="background:rgba(6,182,212,0.1); padding:15px; border-radius:10px; margin-bottom:20px; text-align:center; border:1px solid #06b6d4">
-                        <span style="display:block; font-size:12px; text-transform:uppercase">Valor Total</span>
-                        <span style="font-size:32px; font-weight:900; color:#06b6d4" id="total-price">R$ 5,00</span>
-                    </div>
-
-                    <button type="submit" class="cta-btn">ENVIAR PEDIDO</button>
-                    <button type="button" class="cta-btn secondary-btn" onclick="navigateTo('/Inicio')">VOLTAR</button>
-                    <div id="order-status" class="status"></div>
-                </form>
+        <div class="form-container" id="formContainer">
+            <div class="form-header">
+                <h2 class="form-title">NOVA SOLICITAÇÃO</h2>
+                <p class="form-subtitle">Personalize suas matrizes de bordado</p>
             </div>
-        </div>
 
-
-        <div id="view-avaliar" class="view-section">
-            <div class="form-container">
-                <h2 class="form-title">AVALIE NOSSO SERVIÇO</h2>
-                <p style="text-align:center; margin-bottom:20px; opacity:0.8">Sua opinião é muito importante para nós!</p>
-
-                <form id="reviewForm">
-                    <div class="input-group">
-                        <label>Seu Nome</label>
-                        <input type="text" id="review-name" required>
-                    </div>
-
-                    <label style="text-align:center">Quantas estrelas merecemos?</label>
-                    <div class="rating-box">
-                        <input type="radio" name="rating" id="star5" value="5" required><label for="star5">★</label>
-                        <input type="radio" name="rating" id="star4" value="4"><label for="star4">★</label>
-                        <input type="radio" name="rating" id="star3" value="3"><label for="star3">★</label>
-                        <input type="radio" name="rating" id="star2" value="2"><label for="star2">★</label>
-                        <input type="radio" name="rating" id="star1" value="1"><label for="star1">★</label>
-                    </div>
-
-                    <div class="input-group">
-                        <label>Comentário (Opcional)</label>
-                        <textarea id="review-comment" rows="3" placeholder="Conte como foi sua experiência..."></textarea>
-                    </div>
-
-                    <button type="submit" class="cta-btn">ENVIAR AVALIAÇÃO</button>
-                    <button type="button" class="cta-btn secondary-btn" onclick="navigateTo('/Inicio')">CANCELAR</button>
-                    <div id="review-status" class="status"></div>
-                </form>
-            </div>
-        </div>
-
-
-        <div id="view-adm" class="view-section">
-            <div class="form-container">
-                <h2 class="form-title">PAINEL ADM</h2>
-                
-                <div id="adm-login" class="admin-login">
-                    <input type="password" id="adm-pass" placeholder="Senha Administrativa" style="text-align:center; margin-bottom:10px">
-                    <button class="cta-btn" onclick="checkAdm()">ENTRAR</button>
-                    <button class="cta-btn secondary-btn" onclick="navigateTo('/Inicio')">SAIR</button>
+            <form id="orderForm">
+                <div class="form-group">
+                    <label for="name">👤 Seu Nome</label>
+                    <input type="text" id="name" placeholder="Digite seu nome completo" required>
                 </div>
 
-                <div id="adm-content" class="admin-panel">
-                    <div class="input-group">
-                        <label>Total de Pedidos Realizados (Manual)</label>
-                        <input type="number" id="adm-orders-count">
-                    </div>
-                    <button class="cta-btn" onclick="updateStats()">ATUALIZAR DADOS</button>
-                    <div id="adm-status" class="status"></div>
-                    <br>
-                    <button class="cta-btn secondary-btn" onclick="navigateTo('/Inicio')">VOLTAR AO INÍCIO</button>
+                <div class="form-group">
+                    <label for="contact">📱 Contato</label>
+                    <input type="text" id="contact" placeholder="@telegram ou (XX) 99999-9999" required>
                 </div>
-            </div>
+
+                <div class="form-group">
+                    <label>🔢 Quantidade de Matrizes</label>
+                    <div class="qty-control">
+                        <button type="button" class="qty-btn" id="decreaseQty">−</button>
+                        <div class="qty-display" id="qtyDisplay">1</div>
+                        <button type="button" class="qty-btn" id="increaseQty">+</button>
+                    </div>
+                </div>
+
+                <div class="names-section" id="namesSection"></div>
+
+                <div class="form-group">
+                    <label for="details">📝 Observações (Opcional)</label>
+                    <textarea id="details" rows="3" placeholder="Cor preferencial, modelo da máquina, etc..."></textarea>
+                </div>
+
+                <div class="price-display">
+                    <div class="price-label">Valor Total</div>
+                    <div class="price-value-block">
+                        <span class="price-currency">R$</span>
+                        <span class="price-value" id="totalPrice">5,00</span>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="back-btn" id="voltarBtn">← VOLTAR</button>
+                    <button type="submit" class="submit-btn">ENVIAR PEDIDO</button>
+                </div>
+
+                <div id="statusMessage" class="status"></div>
+            </form>
         </div>
 
+        <div class="form-container" id="avaliacaoContainer">
+            <div class="form-header">
+                <h2 class="form-title">AVALIAR SERVIÇO</h2>
+                <p class="form-subtitle">Sua opinião é muito importante para nós</p>
+            </div>
+
+            <form id="ratingForm">
+                <div class="rating-section">
+                    <div class="satisfaction-text">Você ficou satisfeito com o atendimento?</div>
+                    <div class="rating-group" id="ratingGroup">
+                        <button type="button" class="rating-btn" data-rating="1">😢</button>
+                        <button type="button" class="rating-btn" data-rating="2">😕</button>
+                        <button type="button" class="rating-btn" data-rating="3">😐</button>
+                        <button type="button" class="rating-btn" data-rating="4">😊</button>
+                        <button type="button" class="rating-btn" data-rating="5">😍</button>
+                    </div>
+                    <input type="hidden" id="selectedRating" value="0">
+                </div>
+
+                <div class="form-group comment-box">
+                    <label for="comment">💬 Comentário (Opcional)</label>
+                    <textarea id="comment" rows="4" placeholder="Deixe seu feedback..."></textarea>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="back-btn" id="voltarAvaliacao">← VOLTAR</button>
+                    <button type="submit" class="submit-btn">ENVIAR AVALIAÇÃO</button>
+                </div>
+
+                <div id="ratingStatus" class="status"></div>
+            </form>
+        </div>
+
+        <div class="admin-panel" id="adminPanel">
+            <div class="header">
+                <h1 class="logo">PAINEL ADMINISTRATIVO</h1>
+                <p class="description">Gerenciamento do sistema LKZ Matrizes</p>
+            </div>
+
+            <div class="admin-section">
+                <h3 class="admin-title">📊 Estatísticas</h3>
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>Total de Pedidos</th>
+                            <th>Total de Matrizes</th>
+                            <th>Total de Avaliações</th>
+                            <th>Avaliação Média</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="adminTotalOrders">0</td>
+                            <td id="adminTotalMatrizes">0</td>
+                            <td id="adminTotalRatings">0</td>
+                            <td id="adminAverageRating">0.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="admin-section">
+                <h3 class="admin-title">➕ Adicionar Pedidos</h3>
+                <input type="number" class="admin-input" id="ordersToAdd" placeholder="Quantidade de pedidos a adicionar" min="0">
+                <button class="admin-btn" onclick="addOrders()">Adicionar Pedidos</button>
+            </div>
+
+            <div class="admin-section">
+                <h3 class="admin-title">📝 Últimos Pedidos</h3>
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Matrizes</th>
+                            <th>Contato</th>
+                            <th>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="admin-section">
+                <h3 class="admin-title">⭐ Últimas Avaliações</h3>
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>Nota</th>
+                            <th>Comentário</th>
+                            <th>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ratingsTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <button class="admin-btn logout-btn" onclick="logoutAdmin()">Sair do Painel</button>
+        </div>
+    </div>
+
+    <div class="password-modal" id="passwordModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Acesso de Administrador</h2>
+            <input type="password" class="modal-input" id="adminPassword" placeholder="Digite a senha">
+            <button class="modal-btn" onclick="validatePassword()">Entrar</button>
+            <button class="modal-btn modal-cancel" onclick="closeAdminModal()">Cancelar</button>
+            <div class="modal-error" id="passwordError"></div>
+        </div>
     </div>
 
     <script>
-        // --- CONFIGURAÇÕES ---
-        const FIREBASE_URL = "https://dados-e6625-default-rtdb.firebaseio.com/";
-        const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1450202907436646574/ILD19nLYRV4jNEqKpOjOkDDvnVuvt6k3LMESQwMgtDvhQd7rdHguntljgmxeWlfxd6yv";
-        
-        // --- SISTEMA DE ROTAS ---
-        // Muda a URL visualmente e exibe a section correta
-        function navigateTo(route) {
-            // Remove a barra inicial se houver para normalizar
-            const cleanRoute = route.startsWith('/') ? route : '/' + route;
-            
-            // Atualiza o hash da URL (ex: #/Compra)
-            window.location.hash = cleanRoute;
-            
-            // Esconde todas as views
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            
-            // Mostra a view correta baseada no ID
-            const viewId = 'view-' + cleanRoute.replace('/', '').toLowerCase();
-            const target = document.getElementById(viewId);
-            
-            if (target) {
-                target.classList.add('active');
-                window.scrollTo(0,0);
-            } else {
-                // Se rota não existir, vai para Inicio
-                navigateTo('/Inicio');
-            }
-        }
+        const firebaseConfig = {
+            apiKey: "AIzaSyBWxl0q0RfG_0wvpFa6j9hG8aI3dJ5kL2m",
+            authDomain: "dados-e6625.firebaseapp.com",
+            databaseURL: "https://dados-e6625-default-rtdb.firebaseio.com",
+            projectId: "dados-e6625",
+            storageBucket: "dados-e6625.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef123456"
+        };
 
-        // Escuta mudanças na URL (botão voltar do navegador)
-        window.addEventListener('hashchange', () => {
-            const hash = window.location.hash.replace('#', '');
-            navigateTo(hash || '/Inicio');
-        });
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-        // Inicialização
-        window.addEventListener('DOMContentLoaded', () => {
-            const hash = window.location.hash.replace('#', '');
-            navigateTo(hash || '/Inicio');
-            loadFirebaseData(); // Carrega dados ao abrir
-            updateMatrixForms(); // Inicia formulário de compra
-        });
+        const ADMIN_PASSWORD = "lkz123";
+        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1450202907436646574/ILD19nLYRV4jNEqKpOjOkDDvnVuvt6k3LMESQwMgtDvhQd7rdHguntljgmxeWlfxd6yv";
 
+        let quantity = 1;
+        let selectedRating = 0;
 
-        // --- FIREBASE: LEITURA E ESCRITA ---
+        const dashboard = document.getElementById('dashboard');
+        const formContainer = document.getElementById('formContainer');
+        const avaliacaoContainer = document.getElementById('avaliacaoContainer');
+        const adminPanel = document.getElementById('adminPanel');
+        const passwordModal = document.getElementById('passwordModal');
+        const fazerPedidoBtn = document.getElementById('fazerPedidoBtn');
+        const voltarBtn = document.getElementById('voltarBtn');
+        const qtyDisplay = document.getElementById('qtyDisplay');
+        const namesSection = document.getElementById('namesSection');
+        const totalPriceEl = document.getElementById('totalPrice');
 
-        async function loadFirebaseData() {
-            try {
-                // 1. Busca estatísticas gerais
-                let resStats = await fetch(`${FIREBASE_URL}stats.json`);
-                let stats = await resStats.json();
-                
-                // Se vazio, cria estrutura padrão
-                if (!stats) {
-                    stats = { orders: 0 };
-                    await fetch(`${FIREBASE_URL}stats.json`, { method: 'PUT', body: JSON.stringify(stats) });
-                }
-
-                // 2. Busca avaliações
-                let resReviews = await fetch(`${FIREBASE_URL}avaliacoes.json`);
-                let reviews = await resReviews.json();
-
-                // 3. Cálculos
-                let totalRating = 0;
-                let count = 0;
-                let commentsHtml = '';
-
-                if (reviews) {
-                    const reviewList = Object.values(reviews);
-                    count = reviewList.length;
-                    
-                    // Ordena reviews do mais novo pro antigo (assumindo ordem de inserção)
-                    reviewList.reverse().forEach(r => {
-                        totalRating += parseInt(r.rating);
-                        if(r.comment) {
-                            const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
-                            commentsHtml += `
-                                <div class="review-item">
-                                    <div style="font-weight:bold; font-size:13px">${r.name} <span class="review-stars">${stars}</span></div>
-                                    <div style="font-size:12px; opacity:0.8">"${r.comment}"</div>
-                                </div>
-                            `;
-                        }
-                    });
-                }
-
-                const average = count > 0 ? (totalRating / count).toFixed(1) : "5.0";
-
-                // 4. Atualiza a UI da Home
-                document.getElementById('stat-orders').innerText = stats.orders + "+";
-                document.getElementById('stat-rating').innerText = average;
-                document.getElementById('stat-count').innerText = count;
-                
-                const reviewsContainer = document.getElementById('reviews-list');
-                reviewsContainer.innerHTML = commentsHtml || '<p style="text-align:center; font-size:12px">Seja o primeiro a avaliar!</p>';
-
-            } catch (err) {
-                console.error("Erro Firebase:", err);
-            }
-        }
-
-        // --- LÓGICA DE AVALIAÇÃO ---
-        document.getElementById('reviewForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button[type="submit"]');
-            btn.innerHTML = "ENVIANDO...";
-            btn.disabled = true;
-
-            const data = {
-                name: document.getElementById('review-name').value,
-                rating: document.querySelector('input[name="rating"]:checked').value,
-                comment: document.getElementById('review-comment').value,
-                date: new Date().toISOString()
-            };
-
-            try {
-                await fetch(`${FIREBASE_URL}avaliacoes.json`, {
-                    method: 'POST',
-                    body: JSON.stringify(data)
+        function initializeFirebase() {
+            db.ref('meta').once('value').catch(() => {
+                db.ref('meta').set({
+                    totalPedidos: 0,
+                    totalMatrizes: 0,
+                    totalAvaliados: 0,
+                    somaNotas: 0
                 });
-                
-                document.getElementById('review-status').innerHTML = "✅ Avaliação enviada! Redirecionando...";
-                document.getElementById('review-status').className = "status success active";
-                document.getElementById('review-status').style.display = 'block';
+            });
 
-                setTimeout(() => {
-                    document.getElementById('reviewForm').reset();
-                    document.getElementById('review-status').style.display = 'none';
-                    btn.innerHTML = "ENVIAR AVALIAÇÃO";
-                    btn.disabled = false;
-                    loadFirebaseData(); // Atualiza média
-                    navigateTo('/Inicio');
-                }, 2000);
+            db.ref('pedidos').once('value').catch(() => {
+                db.ref('pedidos').set({});
+            });
 
-            } catch (error) {
-                alert("Erro ao enviar avaliação.");
-                btn.disabled = false;
-            }
-        });
+            db.ref('avaliacoes').once('value').catch(() => {
+                db.ref('avaliacoes').set({});
+            });
 
-
-        // --- LÓGICA DO PEDIDO (COMPRA) ---
-        let qty = 1;
-
-        function changeQty(delta) {
-            qty += delta;
-            if(qty < 1) qty = 1;
-            document.getElementById('qty-display').innerText = qty;
-            updateMatrixForms();
+            loadDashboardStats();
         }
 
-        function updateMatrixForms() {
-            const container = document.getElementById('matrices-details-container');
-            container.innerHTML = '';
-            
-            for(let i=0; i<qty; i++) {
-                container.innerHTML += `
-                    <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:10px; margin-bottom:10px; border:1px solid rgba(124,58,237,0.2)">
-                        <p style="font-size:12px; font-weight:bold; margin-bottom:10px; color:#7c3aed">MATRIZ #${i+1}</p>
-                        <div style="display:grid; gap:10px;">
-                            <input type="text" class="matriz-nome" placeholder="Texto/Nome a bordar" required>
-                            <input type="text" class="matriz-fonte" placeholder="Nome da Fonte (Ex: Arial)" required>
-                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px">
-                                <input type="number" class="matriz-altura" placeholder="Altura (mm)" required>
-                                <input type="number" class="matriz-largura" placeholder="Largura (mm)" required>
+        function loadDashboardStats() {
+            db.ref('meta').on('value', (snapshot) => {
+                const data = snapshot.val() || {};
+                const totalMatrizes = data.totalMatrizes || 0;
+                const totalAvaliados = data.totalAvaliados || 0;
+                const somaNotas = data.somaNotas || 0;
+                const averageRating = totalAvaliados > 0 ? (somaNotas / totalAvaliados).toFixed(1) : '0.0';
+
+                document.getElementById('totalMatrizes').textContent = totalMatrizes;
+                document.getElementById('averageRating').textContent = averageRating;
+                document.getElementById('totalClients').textContent = totalAvaliados;
+
+                document.getElementById('adminTotalMatrizes').textContent = totalMatrizes;
+                document.getElementById('adminTotalRatings').textContent = totalAvaliados;
+                document.getElementById('adminAverageRating').textContent = averageRating;
+            });
+
+            db.ref('meta/totalPedidos').on('value', (snapshot) => {
+                const totalPedidos = snapshot.val() || 0;
+                document.getElementById('adminTotalOrders').textContent = totalPedidos;
+            });
+        }
+
+        function calculatePrice(qty) {
+            if (qty <= 2) return qty * 5;
+            if (qty <= 4) return qty * 4;
+            return qty * 3;
+        }
+
+        function getPricePerUnit(qty) {
+            if (qty <= 2) return 5;
+            if (qty <= 4) return 4;
+            return 3;
+        }
+
+        function updatePrice() {
+            const price = calculatePrice(quantity);
+            totalPriceEl.textContent = price.toFixed(2).replace('.', ',');
+        }
+
+        function createNameBlock(index) {
+            return `
+                <div class="name-block">
+                    <div class="name-block-header">
+                        <span>💾 Matriz ${index + 1}</span>
+                    </div>
+                    <div class="name-input">
+                        <input type="text" 
+                               name="nome_${index}" 
+                               placeholder="Digite o texto/nome para a matriz" 
+                               required>
+                    </div>
+                    <div class="customization-grid">
+                        <div class="fonte-group">
+                            <div class="custom-group">
+                                <label class="custom-label">🔤 Fonte</label>
+                                <input type="text" 
+                                       name="fonte_${index}" 
+                                       placeholder="Ex: Arial, Times, Comic Sans..." 
+                                       class="size-input"
+                                       required>
+                            </div>
+                        </div>
+                        <div class="custom-group">
+                            <label class="custom-label">📏 Dimensões (mm)</label>
+                            <div class="size-inputs">
+                                <div class="size-input-wrapper">
+                                    <input type="number" 
+                                           name="altura_${index}" 
+                                           placeholder="Altura" 
+                                           class="size-input"
+                                           min="1"
+                                           required>
+                                    <div class="mm-label">Altura (mm)</div>
+                                </div>
+                                <div class="size-input-wrapper">
+                                    <input type="number" 
+                                           name="largura_${index}" 
+                                           placeholder="Largura" 
+                                           class="size-input"
+                                           min="1"
+                                           required>
+                                    <div class="mm-label">Largura (mm)</div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                `;
-            }
-
-            // Atualiza Preço
-            let price = 5; // Padrão
-            if(qty >= 3 && qty <= 4) price = 4;
-            if(qty >= 5) price = 3;
-            
-            const total = qty * price;
-            document.getElementById('total-price').innerText = `R$ ${total},00`;
+                </div>
+            `;
         }
 
-        document.getElementById('orderForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button[type="submit"]');
-            const statusDiv = document.getElementById('order-status');
-            
-            btn.innerHTML = "PROCESSANDO...";
-            btn.disabled = true;
+        function updateNameBlocks() {
+            namesSection.innerHTML = '';
+            for (let i = 0; i < quantity; i++) {
+                namesSection.innerHTML += createNameBlock(i);
+            }
+        }
 
-            // Coleta dados
-            const client = document.getElementById('order-name').value;
-            const contact = document.getElementById('order-contact').value;
-            const obs = document.getElementById('order-obs').value;
-            const priceText = document.getElementById('total-price').innerText;
+        document.getElementById('increaseQty').addEventListener('click', () => {
+            quantity++;
+            qtyDisplay.textContent = quantity;
+            updatePrice();
+            updateNameBlocks();
+        });
 
-            // Coleta Matrizes
-            let details = "";
-            const names = document.querySelectorAll('.matriz-nome');
-            const fonts = document.querySelectorAll('.matriz-fonte');
-            const heights = document.querySelectorAll('.matriz-altura');
-            const widths = document.querySelectorAll('.matriz-largura');
-
-            names.forEach((input, i) => {
-                details += `**Matriz ${i+1}:** ${input.value} | Fonte: ${fonts[i].value} | ${heights[i].value}x${widths[i].value}mm\n`;
-            });
-
-            // Payload Discord
-            const payload = {
-                username: "LKZ Pedidos",
-                embeds: [{
-                    title: "🛒 NOVO PEDIDO RECEBIDO",
-                    color: 3066993,
-                    fields: [
-                        { name: "Cliente", value: client, inline: true },
-                        { name: "Contato", value: contact, inline: true },
-                        { name: "Total", value: priceText, inline: true },
-                        { name: "Detalhes do Pedido", value: details },
-                        { name: "Observações", value: obs || "Nenhuma" }
-                    ]
-                }]
-            };
-
-            try {
-                await fetch(DISCORD_WEBHOOK, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
-                });
-
-                statusDiv.style.display = 'block';
-                statusDiv.className = 'status success';
-                statusDiv.innerHTML = "✅ Pedido enviado! Entraremos em contato pelo número informado.";
-                e.target.reset();
-                qty = 1;
-                changeQty(0);
-            } catch (err) {
-                statusDiv.style.display = 'block';
-                statusDiv.className = 'status error';
-                statusDiv.innerHTML = "❌ Erro ao enviar. Tente novamente.";
-            } finally {
-                btn.innerHTML = "ENVIAR PEDIDO";
-                btn.disabled = false;
+        document.getElementById('decreaseQty').addEventListener('click', () => {
+            if (quantity > 1) {
+                quantity--;
+                qtyDisplay.textContent = quantity;
+                updatePrice();
+                updateNameBlocks();
             }
         });
 
+        fazerPedidoBtn.addEventListener('click', () => {
+            dashboard.style.display = 'none';
+            formContainer.classList.add('active');
+            updateNameBlocks();
+        });
 
-        // --- ÁREA ADMIN ---
-        function checkAdm() {
-            const pass = document.getElementById('adm-pass').value;
-            if(pass === "admin123") { // Senha simples (client-side)
-                document.getElementById('adm-login').style.display = 'none';
-                document.getElementById('adm-content').classList.add('active');
-                loadAdmStats();
+        voltarBtn.addEventListener('click', () => {
+            formContainer.classList.remove('active');
+            dashboard.style.display = 'block';
+            quantity = 1;
+            qtyDisplay.textContent = '1';
+            updatePrice();
+            document.getElementById('statusMessage').style.display = 'none';
+        });
+
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const submitBtn = e.target.querySelector('.submit-btn');
+            const statusDiv = document.getElementById('statusMessage');
+
+            const clientName = document.getElementById('name').value;
+            const contact = document.getElementById('contact').value;
+            const details = document.getElementById('details').value || "Nenhuma observação";
+            const totalPrice = calculatePrice(quantity);
+            const pricePerUnit = getPricePerUnit(quantity);
+
+            let namesData = [];
+            for (let i = 0; i < quantity; i++) {
+                const nome = document.querySelector(`input[name="nome_${i}"]`).value;
+                const fonte = document.querySelector(`input[name="fonte_${i}"]`).value;
+                const altura = document.querySelector(`input[name="altura_${i}"]`).value;
+                const largura = document.querySelector(`input[name="largura_${i}"]`).value;
+                namesData.push({ nome, fonte, altura, largura });
+            }
+
+            const namesMarkdown = namesData.map((n, i) => 
+                `### 💾 Matriz ${i + 1}\n` +
+                `> **Texto:** \`${n.nome}\`\n` +
+                `> **Fonte:** \`${n.fonte}\`\n` +
+                `> **Dimensões:** \`${n.altura}mm (A) × ${n.largura}mm (L)\`\n`
+            ).join('\n');
+
+            submitBtn.innerHTML = "ENVIANDO...";
+            submitBtn.disabled = true;
+
+            const embedDescription = 
+                `## 📋 Resumo do Pedido\n\n` +
+                `**👤 Cliente:** ${clientName}\n` +
+                `**📱 Contato:** ${contact}\n` +
+                `**🔢 Quantidade:** ${quantity} ${quantity === 1 ? 'matriz' : 'matrizes'}\n` +
+                `**💵 Preço Unitário:** R$ ${pricePerUnit.toFixed(2).replace('.', ',')}\n` +
+                `**💰 Valor Total:** R$ ${totalPrice.toFixed(2).replace('.', ',')}\n\n` +
+                `---\n\n` +
+                `## ✏️ Especificações das Matrizes\n\n` +
+                `${namesMarkdown}\n` +
+                `---\n\n` +
+                `## 📝 Observações\n` +
+                `${details}\n\n` +
+                `> **💾 Entrega:** Arquivos digitais prontos para pen-drive`;
+
+            const payload = {
+                username: "LKZ Matrizes Bot",
+                avatar_url: "https://cdn-icons-png.flaticon.com/512/3532/3532598.png",
+                embeds: [{
+                    title: "🎉 NOVO PEDIDO DE MATRIZES",
+                    description: embedDescription,
+                    color: 8029939,
+                    footer: { 
+                        text: "LKZ Matrizes • Criação de Matrizes Profissionais",
+                        icon_url: "https://cdn-icons-png.flaticon.com/512/3532/3532598.png"
+                    },
+                    timestamp: new Date(),
+                    thumbnail: {
+                        url: "https://cdn-icons-png.flaticon.com/512/3532/3532598.png"
+                    }
+                }]
+            };
+
+            fetch(DISCORD_WEBHOOK_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (response.ok) {
+                    db.ref('meta/totalPedidos').once('value', (snapshot) => {
+                        const current = snapshot.val() || 0;
+                        db.ref('meta/totalPedidos').set(current + 1);
+                    });
+
+                    db.ref('meta/totalMatrizes').once('value', (snapshot) => {
+                        const current = snapshot.val() || 0;
+                        db.ref('meta/totalMatrizes').set(current + quantity);
+                    });
+
+                    const pedidoId = Date.now();
+                    db.ref(`pedidos/${pedidoId}`).set({
+                        cliente: clientName,
+                        contato: contact,
+                        quantidade: quantity,
+                        matrizes: namesData,
+                        detalhes: details,
+                        total: totalPrice,
+                        data: new Date().toLocaleString('pt-BR')
+                    });
+
+                    loadOrdersTable();
+
+                    statusDiv.innerHTML = `
+                        ✅ <strong>Pedido Enviado com Sucesso!</strong><br>
+                        Entrarei em contato em até <strong>24h</strong> no número fornecido.<br>
+                        As matrizes serão enviadas após a confirmação do pagamento.<br>
+                        Para suporte, envie mensagem no <a href="https://t.me/+5516991605819"><strong>Suporte Telegram</strong></a>.<br><br>
+                        <button class="link-btn" onclick="irParaAvaliacao()">Avaliar Serviço →</button>
+                    `;
+                    statusDiv.className = "status success";
+                    statusDiv.style.display = "block";
+                    document.getElementById('orderForm').reset();
+                    quantity = 1;
+                    qtyDisplay.textContent = '1';
+                    updatePrice();
+                } else {
+                    throw new Error('Erro no envio');
+                }
+            })
+            .catch(error => {
+                statusDiv.innerHTML = "❌ Erro ao enviar. Tente novamente.";
+                statusDiv.className = "status error";
+                statusDiv.style.display = "block";
+            })
+            .finally(() => {
+                submitBtn.innerHTML = "ENVIAR PEDIDO";
+                submitBtn.disabled = false;
+            });
+        });
+
+        document.querySelectorAll('.rating-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedRating = parseInt(btn.dataset.rating);
+                document.getElementById('selectedRating').value = selectedRating;
+            });
+        });
+
+        document.getElementById('ratingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if (selectedRating === 0) {
+                alert('Por favor, selecione uma nota!');
+                return;
+            }
+
+            const comment = document.getElementById('comment').value || '';
+            const submitBtn = e.target.querySelector('.submit-btn');
+            const statusDiv = document.getElementById('ratingStatus');
+
+            submitBtn.innerHTML = "ENVIANDO...";
+            submitBtn.disabled = true;
+
+            const avaliacaoId = Date.now();
+            db.ref(`avaliacoes/${avaliacaoId}`).set({
+                nota: selectedRating,
+                comentario: comment,
+                data: new Date().toLocaleString('pt-BR')
+            });
+
+            db.ref('meta/totalAvaliados').once('value', (snapshot) => {
+                const current = snapshot.val() || 0;
+                db.ref('meta/totalAvaliados').set(current + 1);
+            });
+
+            db.ref('meta/somaNotas').once('value', (snapshot) => {
+                const current = snapshot.val() || 0;
+                db.ref('meta/somaNotas').set(current + selectedRating);
+            });
+
+            loadRatingsTable();
+
+            statusDiv.innerHTML = `✅ <strong>Avaliação Enviada!</strong><br>Obrigado pelo feedback!<br><br><button class="link-btn" onclick="irParaInicio()">Voltar para Início →</button>`;
+            statusDiv.className = "status success";
+            statusDiv.style.display = "block";
+
+            setTimeout(() => {
+                submitBtn.innerHTML = "ENVIAR AVALIAÇÃO";
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+
+        document.getElementById('voltarAvaliacao').addEventListener('click', () => {
+            avaliacaoContainer.classList.remove('active');
+            dashboard.style.display = 'block';
+            selectedRating = 0;
+            document.getElementById('selectedRating').value = 0;
+            document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+            document.getElementById('comment').value = '';
+            document.getElementById('ratingStatus').style.display = 'none';
+        });
+
+        function irParaAvaliacao() {
+            formContainer.classList.remove('active');
+            avaliacaoContainer.classList.add('active');
+        }
+
+        function irParaInicio() {
+            avaliacaoContainer.classList.remove('active');
+            dashboard.style.display = 'block';
+            selectedRating = 0;
+            document.getElementById('selectedRating').value = 0;
+            document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+            document.getElementById('comment').value = '';
+            document.getElementById('ratingStatus').style.display = 'none';
+        }
+
+        function openAdminModal() {
+            passwordModal.style.display = 'flex';
+        }
+
+        function closeAdminModal() {
+            passwordModal.style.display = 'none';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('passwordError').textContent = '';
+        }
+
+        function validatePassword() {
+            const password = document.getElementById('adminPassword').value;
+            const errorDiv = document.getElementById('passwordError');
+
+            if (password === ADMIN_PASSWORD) {
+                closeAdminModal();
+                dashboard.style.display = 'none';
+                formContainer.classList.remove('active');
+                avaliacaoContainer.classList.remove('active');
+                adminPanel.style.display = 'block';
+                loadOrdersTable();
+                loadRatingsTable();
             } else {
-                alert("Senha incorreta!");
+                errorDiv.textContent = 'Senha incorreta!';
             }
         }
 
-        async function loadAdmStats() {
-            let res = await fetch(`${FIREBASE_URL}stats.json`);
-            let data = await res.json();
-            if(data) {
-                document.getElementById('adm-orders-count').value = data.orders || 0;
-            }
+        function logoutAdmin() {
+            adminPanel.style.display = 'none';
+            dashboard.style.display = 'block';
         }
 
-        async function updateStats() {
-            const newOrders = parseInt(document.getElementById('adm-orders-count').value);
-            try {
-                await fetch(`${FIREBASE_URL}stats.json`, {
-                    method: 'PATCH',
-                    body: JSON.stringify({ orders: newOrders })
+        function addOrders() {
+            const ordersToAdd = parseInt(document.getElementById('ordersToAdd').value) || 0;
+            if (ordersToAdd <= 0) {
+                alert('Digite um número válido!');
+                return;
+            }
+
+            db.ref('meta/totalPedidos').once('value', (snapshot) => {
+                const current = snapshot.val() || 0;
+                db.ref('meta/totalPedidos').set(current + ordersToAdd);
+                document.getElementById('ordersToAdd').value = '';
+                alert(`${ordersToAdd} pedido(s) adicionado(s)!`);
+            });
+        }
+
+        function loadOrdersTable() {
+            db.ref('pedidos').on('value', (snapshot) => {
+                const data = snapshot.val() || {};
+                const tbody = document.getElementById('ordersTableBody');
+                tbody.innerHTML = '';
+
+                const pedidos = Object.entries(data).reverse().slice(0, 10);
+                
+                pedidos.forEach(([id, pedido]) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${pedido.cliente}</td>
+                        <td>${pedido.quantidade}</td>
+                        <td>${pedido.contato}</td>
+                        <td>${pedido.data}</td>
+                    `;
+                    tbody.appendChild(row);
                 });
-                document.getElementById('adm-status').style.display = 'block';
-                document.getElementById('adm-status').className = 'status success';
-                document.getElementById('adm-status').innerText = "Dados atualizados!";
-                loadFirebaseData(); // Atualiza a home também
-            } catch(e) {
-                alert("Erro ao atualizar");
-            }
+            });
         }
 
+        function loadRatingsTable() {
+            db.ref('avaliacoes').on('value', (snapshot) => {
+                const data = snapshot.val() || {};
+                const tbody = document.getElementById('ratingsTableBody');
+                tbody.innerHTML = '';
+
+                const avaliacoes = Object.entries(data).reverse().slice(0, 10);
+                
+                avaliacoes.forEach(([id, avaliacao]) => {
+                    const row = document.createElement('tr');
+                    const estrelasEmoji = '⭐'.repeat(avaliacao.nota);
+                    row.innerHTML = `
+                        <td>${estrelasEmoji} (${avaliacao.nota})</td>
+                        <td>${avaliacao.comentario || '-'}</td>
+                        <td>${avaliacao.data}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            });
+        }
+
+        document.getElementById('adminPassword').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                validatePassword();
+            }
+        });
+
+        initializeFirebase();
+        updatePrice();
     </script>
 </body>
 </html>
